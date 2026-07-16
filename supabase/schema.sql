@@ -562,11 +562,14 @@ UPDATE categorias c SET totaldocumentos = (
 
 CREATE OR REPLACE FUNCTION delete_documento(p_id bigint)
 RETURNS void AS $$
+DECLARE
+  v_categoriaid integer;
 BEGIN
+  SELECT categoriaid INTO v_categoriaid FROM documentos WHERE id = p_id;
   DELETE FROM documento_tags WHERE documentoid = p_id;
   DELETE FROM documentos WHERE id = p_id;
-  UPDATE categorias c SET totaldocumentos = (
-    SELECT COUNT(*) FROM documentos d WHERE d.categoriaid = c.id AND d.ativo = TRUE
-  );
+  UPDATE categorias SET totaldocumentos = (
+    SELECT COUNT(*) FROM documentos WHERE categoriaid = v_categoriaid AND ativo = TRUE
+  ) WHERE id = v_categoriaid;
 END;
 $$ LANGUAGE plpgsql;
