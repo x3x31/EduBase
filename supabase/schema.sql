@@ -194,6 +194,13 @@ CREATE POLICY "Leitura pública documento_tags" ON documento_tags FOR SELECT USI
 CREATE POLICY "Inserir documentos" ON documentos FOR INSERT TO anon WITH CHECK (true);
 CREATE POLICY "Inserir documento_tags" ON documento_tags FOR INSERT TO anon WITH CHECK (true);
 
+-- Permissão de atualização para documentos (via anon/authenticated)
+CREATE POLICY "Atualizar documentos" ON documentos FOR UPDATE TO anon USING (true);
+CREATE POLICY "Atualizar documento_tags" ON documento_tags FOR UPDATE TO anon USING (true);
+
+-- Permissão de exclusão para documento_tags (via anon/authenticated)
+CREATE POLICY "Remover documento_tags" ON documento_tags FOR DELETE TO anon USING (true);
+
 GRANT SELECT ON documentos_completo TO anon, authenticated;
 
 -- ============================================================

@@ -993,7 +993,7 @@ const Views = (() => {
           const tipo = document.getElementById('cad-tipo').value;
           const autor_origem = document.getElementById('cad-autor').value.trim();
 
-          if (!titulo || !url || !selectedEixoId || !selectedCategoriaId || !selectedIconeId) {
+          if (!titulo || !descricao || !url || !selectedEixoId || !selectedCategoriaId || !selectedIconeId) {
             alert('Preencha todos os campos obrigatórios.');
             return;
           }
@@ -1010,6 +1010,7 @@ const Views = (() => {
                 eixoid: selectedEixoId,
                 categoriaid: selectedCategoriaId
               });
+              await Api.updateDocumentoTags(editingDoc.id, [...selectedTagIds]);
               editingDoc = null;
               resetFormState();
               activeTab = 'lista';

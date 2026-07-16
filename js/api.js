@@ -139,6 +139,22 @@ const Api = (() => {
     if (error) throw error;
   }
 
+  async function removeDocumentoTags(docId) {
+    if (useMock) return;
+    const { error } = await supabase
+      .from('documento_tags')
+      .delete()
+      .eq('documentoid', docId);
+    if (error) throw error;
+  }
+
+  async function updateDocumentoTags(docId, tagIds) {
+    await removeDocumentoTags(docId);
+    for (const tagId of tagIds) {
+      await addDocumentoTag(docId, tagId);
+    }
+  }
+
   async function updateDocumento(id, doc) {
     if (useMock) {
       const idx = MOCK_DATA.documentos.findIndex(d => d.id === Number(id));
@@ -181,5 +197,5 @@ const Api = (() => {
     return useMock;
   }
 
-  return { init, getEixos, getEixo, getCategorias, getTags, getIcones, getDocumentos, getDocumentosRecentes, createDocumento, addDocumentoTag, updateDocumento, deleteDocumento, isUsingMock };
+  return { init, getEixos, getEixo, getCategorias, getTags, getIcones, getDocumentos, getDocumentosRecentes, createDocumento, addDocumentoTag, removeDocumentoTags, updateDocumentoTags, updateDocumento, deleteDocumento, isUsingMock };
 })();
