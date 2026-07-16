@@ -572,4 +572,4 @@ BEGIN
     SELECT COUNT(*) FROM documentos WHERE categoriaid = v_categoriaid AND ativo = TRUE
   ) WHERE id = v_categoriaid;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
