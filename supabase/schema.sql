@@ -547,3 +547,18 @@ ON CONFLICT DO NOTHING;
 UPDATE categorias c SET totaldocumentos = (
   SELECT COUNT(*) FROM documentos d WHERE d.categoriaid = c.id AND d.ativo = TRUE
 );
+
+-- ============================================================
+-- FUNÇÕES AUXILIARES
+-- ============================================================
+
+CREATE OR REPLACE FUNCTION delete_documento(p_id bigint)
+RETURNS void AS $$
+BEGIN
+  DELETE FROM documento_tags WHERE documentoid = p_id;
+  DELETE FROM documentos WHERE id = p_id;
+  UPDATE categorias c SET totaldocumentos = (
+    SELECT COUNT(*) FROM documentos d WHERE d.categoriaid = c.id AND d.ativo = TRUE
+  );
+END;
+$$ LANGUAGE plpgsql;

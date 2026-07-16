@@ -1678,3 +1678,352 @@ img {
   gap: 12px;
   align-items: center;
 }
+
+/* ============================================================
+   CADASTRO — TABS
+   ============================================================ */
+.cadastro-tabs {
+  display: flex;
+  gap: 0;
+  background: #f1f5f9;
+  border-radius: var(--radius);
+  padding: 4px;
+  margin-bottom: 20px;
+}
+
+.cadastro-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: transparent;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+}
+
+.cadastro-tab svg {
+  width: 16px;
+  height: 16px;
+}
+
+.cadastro-tab.active {
+  background: var(--primary);
+  color: var(--white);
+  box-shadow: 0 2px 8px rgba(27, 94, 75, 0.25);
+}
+
+.cadastro-tab:not(.active):hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* ============================================================
+   CADASTRO — FORMULÁRIO — AÇÕES
+   ============================================================ */
+.cadastro-form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.cadastro-form-actions .btn-submit {
+  flex: 1;
+}
+
+.btn-cancel-edit {
+  padding: 14px 20px;
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-weight: 600;
+  border: 2px solid #e5e7eb;
+  background: var(--white);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-cancel-edit:hover {
+  border-color: #d1d5db;
+  background: #f9fafb;
+}
+
+/* ============================================================
+   CADASTRO — LISTA DE DOCUMENTOS
+   ============================================================ */
+.doc-manage-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.doc-manage-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  background: var(--white);
+  border-radius: var(--radius);
+  border: 1px solid #e5e7eb;
+  transition: box-shadow 0.2s;
+}
+
+.doc-manage-item:hover {
+  box-shadow: var(--shadow);
+}
+
+.doc-manage-emoji {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  background: var(--primary-bg);
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.doc-manage-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.doc-manage-info h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+}
+
+.doc-manage-info p {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 6px;
+}
+
+.doc-manage-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.doc-eixo-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 50px;
+  white-space: nowrap;
+}
+
+.doc-eixo-badge-green {
+  background: #f0fdf4;
+  color: #1b5e4b;
+}
+
+.doc-eixo-badge-purple {
+  background: #f2f0ff;
+  color: #624693;
+}
+
+.doc-eixo-badge-orange {
+  background: #fff8f0;
+  color: #e8752a;
+}
+
+.doc-cat-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.doc-manage-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.btn-icon-sm {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  border: 1px solid #e5e7eb;
+  background: var(--white);
+  color: var(--text-muted);
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.btn-icon-sm svg {
+  width: 16px;
+  height: 16px;
+}
+
+.btn-icon-sm:hover {
+  background: var(--primary-bg);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.btn-icon-sm.danger:hover {
+  background: #fef2f2;
+  color: #dc2626;
+  border-color: #dc2626;
+}
+
+/* ============================================================
+   MODAL DE CONFIRMAÇÃO
+   ============================================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-confirm {
+  background: var(--white);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: 28px 24px;
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  animation: slideUp 0.25s ease;
+}
+
+.modal-confirm-icon {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 16px;
+  background: #fef2f2;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #dc2626;
+}
+
+.modal-confirm-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.modal-confirm h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.modal-confirm p {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.modal-confirm-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-modal-cancel {
+  flex: 1;
+  padding: 12px;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 600;
+  border: 1.5px solid #e5e7eb;
+  background: var(--white);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-modal-cancel:hover {
+  background: #f9fafb;
+}
+
+.btn-modal-danger {
+  flex: 1;
+  padding: 12px;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  background: #dc2626;
+  color: var(--white);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-modal-danger:hover {
+  background: #b91c1c;
+}
+
+/* ============================================================
+   ANIMAÇÕES
+   ============================================================ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 20px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.empty-state-icon {
+  width: 56px;
+  height: 56px;
+  background: #f1f5f9;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  color: #94a3b8;
+}
+
+.empty-state-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.empty-state p {
+  font-size: 14px;
+  font-weight: 500;
+}

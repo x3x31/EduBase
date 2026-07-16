@@ -597,6 +597,10 @@ const Views = (() => {
       eixosCategorias[eixo.id] = await Api.getCategorias(eixo.id);
     }
 
+    let activeTab = 'novo';
+    let editingDoc = null;
+    let buscaLista = '';
+
     let selectedEixoId = null;
     let selectedCategoriaId = null;
     let selectedIconeId = null;
@@ -606,6 +610,18 @@ const Views = (() => {
     let formUrl = '';
     let formAutor = '';
     let formTipo = 'PDF';
+
+    function resetFormState() {
+      selectedEixoId = null;
+      selectedCategoriaId = null;
+      selectedIconeId = null;
+      selectedTagIds = new Set();
+      formTitulo = '';
+      formDescricao = '';
+      formUrl = '';
+      formAutor = '';
+      formTipo = 'PDF';
+    }
 
     function saveFormState() {
       const t = document.getElementById('cad-titulo');
@@ -661,83 +677,187 @@ const Views = (() => {
       `;
     }
 
-    function renderForm() {
+    function getEixoBadgeClass(eixoid) {
+      const theme = EIXO_THEMES[eixoid];
+      if (!theme) return '';
+      return 'doc-eixo-badge-' + theme.class;
+    }
+
+    function getEixoNome(eixoid) {
+      const e = eixos.find(ex => ex.id === eixoid);
+      return e ? e.nome : '';
+    }
+
+    function getCategoriaNome(catid) {
+      for (const eixo of eixos) {
+        const cats = eixosCategorias[eixo.id] || [];
+        const found = cats.find(c => c.id === catid);
+        if (found) return found.nome;
+      }
+      return '';
+    }
+
+    async function renderDocManageList() {
+      const docs = await Api.getDocumentos();
+      const busca = buscaLista.toLowerCase();
+      const filtered = busca
+        ? docs.filter(d => d.titulo.toLowerCase().includes(busca) || (d.descricao && d.descricao.toLowerCase().includes(busca)))
+        : docs;
+
+      if (filtered.length === 0) {
+        return `
+          <div class="empty-state">
+            <div class="empty-state-icon">${icon('folder')}</div>
+            <p>${busca ? 'Nenhum documento encontrado' : 'Nenhum documento cadastrado'}</p>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="doc-manage-list">
+          ${filtered.map(d => {
+            const emoji = getIconeEmoji(d.iconeid);
+            const badgeClass = getEixoBadgeClass(d.eixoid);
+            const eixoNome = getEixoNome(d.eixoid);
+            const catNome = getCategoriaNome(d.categoriaid);
+            return `
+              <div class="doc-manage-item" data-doc-id="${d.id}">
+                <div class="doc-manage-emoji">${emoji}</div>
+                <div class="doc-manage-info">
+                  <h4>${d.titulo}</h4>
+                  <p>${d.descricao || ''}</p>
+                  <div class="doc-manage-meta">
+                    <span class="doc-eixo-badge ${badgeClass}">${eixoNome}</span>
+                    ${catNome ? `<span class="doc-cat-label">${catNome}</span>` : ''}
+                  </div>
+                </div>
+                <div class="doc-manage-actions">
+                  <button class="btn-icon-sm" data-action="edit-doc" data-doc-id="${d.id}" title="Editar">
+                    ${icon('pencil-case')}
+                  </button>
+                  <button class="btn-icon-sm danger" data-action="delete-doc" data-doc-id="${d.id}" data-doc-titulo="${d.titulo}" title="Excluir">
+                    ${icon('trash-2')}
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    async function renderForm() {
+      const isEditing = !!editingDoc;
+      let docManageListHtml = '';
+      if (activeTab === 'lista') {
+        docManageListHtml = await renderDocManageList();
+      }
       app.innerHTML = `
         <div class="view-transition">
         ${renderHeader(true)}
         <section class="section">
-          <div class="cadastro-header">
-            <h2>Cadastrar Documento</h2>
-            <p>Preencha os dados do documento</p>
+          <div class="cadastro-tabs">
+            <button class="cadastro-tab ${activeTab === 'novo' ? 'active' : ''}" data-tab="novo">
+              ${icon('arrow-right')} Novo Documento
+            </button>
+            <button class="cadastro-tab ${activeTab === 'lista' ? 'active' : ''}" data-tab="lista">
+              ${icon('folder')} Documentos
+            </button>
           </div>
 
-          <form id="cadastro-form" class="cadastro-form">
-            <div class="form-group">
-              <label class="form-label">Título *</label>
-              <input type="text" class="form-input" id="cad-titulo" placeholder="Título do documento" required value="${formTitulo}">
+          ${activeTab === 'novo' ? `
+            <div class="cadastro-header">
+              <h2>${isEditing ? 'Editar Documento' : 'Cadastrar Documento'}</h2>
+              <p>${isEditing ? 'Altere os dados do documento' : 'Preencha os dados do documento'}</p>
             </div>
 
-            <div class="form-group">
-              <label class="form-label">Descrição *</label>
-              <textarea class="form-textarea" id="cad-descricao" placeholder="Descrição do documento" rows="3" required>${formDescricao}</textarea>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">URL *</label>
-              <input type="url" class="form-input" id="cad-url" placeholder="https://..." required value="${formUrl}">
-            </div>
-
-            <div class="form-row">
+            <form id="cadastro-form" class="cadastro-form">
               <div class="form-group">
-                <label class="form-label">Tipo *</label>
-                <select class="form-select" id="cad-tipo" required>
-                  <option value="PDF" ${formTipo === 'PDF' ? 'selected' : ''}>PDF</option>
-                  <option value="site" ${formTipo === 'site' ? 'selected' : ''}>Site</option>
-                </select>
+                <label class="form-label">Título *</label>
+                <input type="text" class="form-input" id="cad-titulo" placeholder="Título do documento" required value="${formTitulo}">
               </div>
+
               <div class="form-group">
-                <label class="form-label">Autor/Origem *</label>
-                <input type="text" class="form-input" id="cad-autor" placeholder="Ex: MEC, PROFEI/UERN" required value="${formAutor}">
+                <label class="form-label">Descrição *</label>
+                <textarea class="form-textarea" id="cad-descricao" placeholder="Descrição do documento" rows="3" required>${formDescricao}</textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">URL *</label>
+                <input type="url" class="form-input" id="cad-url" placeholder="https://..." required value="${formUrl}">
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Tipo *</label>
+                  <select class="form-select" id="cad-tipo" required>
+                    <option value="PDF" ${formTipo === 'PDF' ? 'selected' : ''}>PDF</option>
+                    <option value="site" ${formTipo === 'site' ? 'selected' : ''}>Site</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Autor/Origem *</label>
+                  <input type="text" class="form-input" id="cad-autor" placeholder="Ex: MEC, PROFEI/UERN" required value="${formAutor}">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Eixo *</label>
+                <div class="eixo-selector">
+                  ${eixos.map(e => {
+                    const theme = EIXO_THEMES[e.id];
+                    return `
+                      <div class="eixo-option ${selectedEixoId === e.id ? 'selected theme-' + theme.class : ''}" data-eixo-id="${e.id}">
+                        <div class="eixo-option-emoji">${theme.emoji}</div>
+                        <span>${e.nome}</span>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Categoria *</label>
+                <div id="cad-categorias">
+                  ${renderCategoriasDropdown()}
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Ícone *</label>
+                ${renderIconGrid()}
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Tags</label>
+                ${renderTagChips()}
+              </div>
+
+              <div class="cadastro-form-actions">
+                ${isEditing ? `<button type="button" class="btn-cancel-edit" id="btn-cancel-edit">Cancelar</button>` : ''}
+                <button type="submit" class="btn-submit">
+                  ${icon(isEditing ? 'clipboard-check' : 'arrow-right')}
+                  ${isEditing ? 'Salvar Alterações' : 'Cadastrar Documento'}
+                </button>
+              </div>
+            </form>
+          ` : `
+            <div class="cadastro-header">
+              <h2>Meus Documentos</h2>
+              <p>Gerencie os documentos cadastrados</p>
+            </div>
+
+            <div class="search-bar" style="margin-bottom:16px">
+              <div class="search-input-wrap">
+                ${icon('search')}
+                <input type="text" class="search-input" id="cad-search-input" placeholder="Buscar documento..." autocomplete="off" value="${buscaLista}">
               </div>
             </div>
 
-            <div class="form-group">
-              <label class="form-label">Eixo *</label>
-              <div class="eixo-selector">
-                ${eixos.map(e => {
-                  const theme = EIXO_THEMES[e.id];
-                  return `
-                    <div class="eixo-option ${selectedEixoId === e.id ? 'selected theme-' + theme.class : ''}" data-eixo-id="${e.id}">
-                      <div class="eixo-option-emoji">${theme.emoji}</div>
-                      <span>${e.nome}</span>
-                    </div>
-                  `;
-                }).join('')}
-              </div>
+            <div id="doc-manage-list-container">
+              ${docManageListHtml}
             </div>
-
-            <div class="form-group">
-              <label class="form-label">Categoria *</label>
-              <div id="cad-categorias">
-                ${renderCategoriasDropdown()}
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Ícone *</label>
-              ${renderIconGrid()}
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Tags</label>
-              ${renderTagChips()}
-            </div>
-
-            <button type="submit" class="btn-submit">
-              ${icon('arrow-right')}
-              Cadastrar Documento
-            </button>
-          </form>
+          `}
         </section>
         </div>
       `;
@@ -746,6 +866,34 @@ const Views = (() => {
     }
 
     function attachFormListeners() {
+      document.querySelectorAll('.cadastro-tab').forEach(tab => {
+        tab.addEventListener('click', function () {
+          activeTab = this.dataset.tab;
+          if (activeTab === 'novo' && !editingDoc) {
+            resetFormState();
+          }
+          renderForm();
+        });
+      });
+
+      if (activeTab === 'lista') {
+        const searchInput = document.getElementById('cad-search-input');
+        if (searchInput) {
+          let debounce;
+          searchInput.addEventListener('input', function () {
+            clearTimeout(debounce);
+            debounce = setTimeout(async () => {
+              buscaLista = this.value;
+              const container = document.getElementById('doc-manage-list-container');
+              if (container) container.innerHTML = await renderDocManageList();
+              attachListActions();
+            }, 300);
+          });
+        }
+        attachListActions();
+        return;
+      }
+
       document.querySelectorAll('.eixo-option').forEach(el => {
         el.addEventListener('click', function () {
           saveFormState();
@@ -788,6 +936,16 @@ const Views = (() => {
         });
       });
 
+      const cancelBtn = document.getElementById('btn-cancel-edit');
+      if (cancelBtn) {
+        cancelBtn.addEventListener('click', function () {
+          editingDoc = null;
+          resetFormState();
+          activeTab = 'lista';
+          renderForm();
+        });
+      }
+
       const form = document.getElementById('cadastro-form');
       if (form) {
         form.addEventListener('submit', async function (e) {
@@ -805,46 +963,133 @@ const Views = (() => {
           }
 
           try {
-            const docId = await Api.createDocumento({
-              titulo,
-              descricao,
-              url,
-              tipo,
-              autor_origem,
-              iconeid: selectedIconeId,
-              eixoid: selectedEixoId,
-              categoriaid: selectedCategoriaId
-            });
+            if (editingDoc) {
+              await Api.updateDocumento(editingDoc.id, {
+                titulo,
+                descricao,
+                url,
+                tipo,
+                autor_origem,
+                iconeid: selectedIconeId,
+                eixoid: selectedEixoId,
+                categoriaid: selectedCategoriaId
+              });
+              editingDoc = null;
+              resetFormState();
+              activeTab = 'lista';
+              renderForm();
+            } else {
+              const docId = await Api.createDocumento({
+                titulo,
+                descricao,
+                url,
+                tipo,
+                autor_origem,
+                iconeid: selectedIconeId,
+                eixoid: selectedEixoId,
+                categoriaid: selectedCategoriaId
+              });
 
-            for (const tagId of selectedTagIds) {
-              await Api.addDocumentoTag(docId, tagId);
-            }
+              for (const tagId of selectedTagIds) {
+                await Api.addDocumentoTag(docId, tagId);
+              }
 
-            app.innerHTML = `
-              <div class="view-transition">
-              ${renderHeader()}
-              <section class="section">
-                <div class="cadastro-success">
-                  <div class="cadastro-success-icon">${icon('clipboard-check')}</div>
-                  <h2>Documento cadastrado!</h2>
-                  <p>O documento "${titulo}" foi cadastrado com sucesso.</p>
-                  <div class="cadastro-success-actions">
-                    <button class="btn-outline" onclick="App.navigate('#/biblioteca')">Ver na Biblioteca</button>
-                    <button class="btn-outline" onclick="App.navigate('#/cadastrar')">Cadastrar outro</button>
+              app.innerHTML = `
+                <div class="view-transition">
+                ${renderHeader()}
+                <section class="section">
+                  <div class="cadastro-success">
+                    <div class="cadastro-success-icon">${icon('clipboard-check')}</div>
+                    <h2>Documento cadastrado!</h2>
+                    <p>O documento "${titulo}" foi cadastrado com sucesso.</p>
+                    <div class="cadastro-success-actions">
+                      <button class="btn-outline" onclick="App.navigate('#/biblioteca')">Ver na Biblioteca</button>
+                      <button class="btn-outline" onclick="App.navigate('#/cadastrar')">Cadastrar outro</button>
+                    </div>
                   </div>
+                </section>
                 </div>
-              </section>
-              </div>
-            `;
+              `;
+            }
           } catch (err) {
-            alert('Erro ao cadastrar documento. Tente novamente.');
+            alert('Erro ao salvar documento. Tente novamente.');
             console.error(err);
           }
         });
       }
     }
 
-    renderForm();
+    function attachListActions() {
+      document.querySelectorAll('[data-action="edit-doc"]').forEach(btn => {
+        btn.addEventListener('click', async function () {
+          const docId = Number(this.dataset.docId);
+          const docs = await Api.getDocumentos();
+          const doc = docs.find(d => d.id === docId);
+          if (!doc) return;
+
+          editingDoc = doc;
+          selectedEixoId = doc.eixoid;
+          selectedCategoriaId = doc.categoriaid;
+          selectedIconeId = doc.iconeid;
+          formTitulo = doc.titulo;
+          formDescricao = doc.descricao || '';
+          formUrl = doc.url;
+          formAutor = doc.autor_origem || '';
+          formTipo = doc.tipo || 'PDF';
+          selectedTagIds = new Set();
+          if (doc.tags) {
+            doc.tags.forEach(t => {
+              const tag = tags.find(tg => tg.nome === t.nome);
+              if (tag) selectedTagIds.add(tag.id);
+            });
+          }
+
+          activeTab = 'novo';
+          renderForm();
+        });
+      });
+
+      document.querySelectorAll('[data-action="delete-doc"]').forEach(btn => {
+        btn.addEventListener('click', function () {
+          const docId = Number(this.dataset.docId);
+          const docTitulo = this.dataset.docTitulo;
+          showDeleteConfirm(docId, docTitulo);
+        });
+      });
+    }
+
+    function showDeleteConfirm(docId, docTitulo) {
+      const overlay = document.createElement('div');
+      overlay.className = 'modal-overlay';
+      overlay.innerHTML = `
+        <div class="modal-confirm">
+          <div class="modal-confirm-icon">${icon('trash-2')}</div>
+          <h3>Excluir documento</h3>
+          <p>Tem certeza que deseja excluir <strong>"${docTitulo}"</strong>? Esta ação não pode ser desfeita.</p>
+          <div class="modal-confirm-actions">
+            <button class="btn-modal-cancel" id="modal-cancel">Cancelar</button>
+            <button class="btn-modal-danger" id="modal-confirm-delete">Excluir</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+
+      overlay.querySelector('#modal-cancel').addEventListener('click', () => overlay.remove());
+      overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+
+      overlay.querySelector('#modal-confirm-delete').addEventListener('click', async () => {
+        try {
+          await Api.deleteDocumento(docId);
+          overlay.remove();
+          renderForm();
+        } catch (err) {
+          alert('Erro ao excluir documento.');
+          console.error(err);
+        }
+      });
+    }
+
+    await renderForm();
   }
 
   return {

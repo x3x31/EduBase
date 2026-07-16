@@ -139,9 +139,47 @@ const Api = (() => {
     if (error) throw error;
   }
 
+  async function updateDocumento(id, doc) {
+    if (useMock) {
+      const idx = MOCK_DATA.documentos.findIndex(d => d.id === Number(id));
+      if (idx === -1) throw new Error('Documento não encontrado');
+      MOCK_DATA.documentos[idx] = { ...MOCK_DATA.documentos[idx], ...doc };
+      return;
+    }
+    const { error } = await supabase
+      .from('documentos')
+      .update({
+        titulo: doc.titulo,
+        descricao: doc.descricao,
+        url: doc.url,
+        tipo: doc.tipo,
+        autor_origem: doc.autor_origem,
+        iconeid: doc.iconeid,
+        eixoid: doc.eixoid,
+        categoriaid: doc.categoriaid
+      })
+      .eq('id', id);
+    if (error) throw error;
+  }
+
+  async function deleteDocumento(id) {
+    if (useMock) {
+      const doc = MOCK_DATA.documentos.find(d => d.id === Number(id));
+      if (doc) {
+        const cat = MOCK_DATA.categorias.find(c => c.id === doc.categoriaid);
+        if (cat && cat.totaldocumentos > 0) cat.totaldocumentos--;
+      }
+      MOCK_DATA.documentos = MOCK_DATA.documentos.filter(d => d.id !== Number(id));
+      return;
+    }
+    await supabase.from('documento_tags').delete().eq('documentoid', id);
+    const { error } = await supabase.from('documentos').delete().eq('id', id);
+    if (error) throw error;
+  }
+
   function isUsingMock() {
     return useMock;
   }
 
-  return { init, getEixos, getEixo, getCategorias, getTags, getIcones, getDocumentos, getDocumentosRecentes, createDocumento, addDocumentoTag, isUsingMock };
+  return { init, getEixos, getEixo, getCategorias, getTags, getIcones, getDocumentos, getDocumentosRecentes, createDocumento, addDocumentoTag, updateDocumento, deleteDocumento, isUsingMock };
 })();
