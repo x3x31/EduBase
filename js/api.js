@@ -188,8 +188,7 @@ const Api = (() => {
       MOCK_DATA.documentos = MOCK_DATA.documentos.filter(d => d.id !== Number(id));
       return;
     }
-    await supabase.from('documento_tags').delete().eq('documentoid', id);
-    const { error } = await supabase.from('documentos').delete().eq('id', id);
+    const { error } = await supabase.rpc('delete_documento', { p_id: id });
     if (error) throw error;
   }
 
