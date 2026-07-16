@@ -198,8 +198,9 @@ CREATE POLICY "Inserir documento_tags" ON documento_tags FOR INSERT TO anon WITH
 CREATE POLICY "Atualizar documentos" ON documentos FOR UPDATE TO anon USING (true);
 CREATE POLICY "Atualizar documento_tags" ON documento_tags FOR UPDATE TO anon USING (true);
 
--- Permissão de exclusão para documento_tags (via anon/authenticated)
+-- Permissão de exclusão para documentos e tags (via anon/authenticated)
 CREATE POLICY "Remover documento_tags" ON documento_tags FOR DELETE TO anon USING (true);
+CREATE POLICY "Remover documentos" ON documentos FOR DELETE TO anon USING (true);
 
 GRANT SELECT ON documentos_completo TO anon, authenticated;
 
