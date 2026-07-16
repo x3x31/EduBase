@@ -14,6 +14,7 @@ Aplicativo web mobile-first para acesso a documentos, estratégias e recursos pe
 - Supabase (banco de dados + backend)
 - GitHub Pages (hospedagem)
 - IndexedDB (armazenamento local de favoritos e notificações removidas)
+- localStorage (persistência da Dica do Dia)
 - Fonte Inter (Google Fonts)
 
 ## Funcionalidades
@@ -25,7 +26,30 @@ Aplicativo web mobile-first para acesso a documentos, estratégias e recursos pe
 - Card **"Nosso objetivo"** com a missão do EduBase
 - Seção **"Eixos do EduBase"** com 3 cards clicáveis (verde, roxo, laranja) — cada um navega para o eixo correspondente
 - Link "Ver todos" para a Biblioteca
-- **Dica do dia** na parte inferior (puxada do campo `dica` do primeiro eixo)
+- **Dica do Dia** — rotação automática de 21 frases sobre educação inclusiva
+
+#### Dica do Dia — Detalhes
+
+O card "Dica do Dia" funciona com as seguintes regras:
+
+| Regra | Descrição |
+|-------|-----------|
+| **Seleção aleatória** | Uma das 21 frases é sorteada a cada ciclo |
+| **Rotação automática** | Nova dica a cada 5 minutos (atualização em tempo real) |
+| **Persistência** | Mantém mesma dica ao recarregar a página (usando `localStorage`) |
+| **Timestamp** | Cada dica salva com horário para controle de expiração |
+
+Frases incluem temas como:
+- Legislação e documentos legais
+- Adaptação curricular
+- Recursos multissensoriais
+- Avaliações inclusivas
+- Comunicação alternativa e aumentativa
+- Tecnologias assistivas
+- Formação continuada do professor
+- Autonomia dos alunos
+- Acessibilidade física e pedagógica
+- E mais...
 
 ### 2. Eixos Temáticos (`#/eixo/:id`)
 
@@ -146,7 +170,9 @@ Dentro de cada eixo:
 - **Índices** nas foreign keys para performance (`idx_categorias_eixoid`, `idx_documentos_categoriaid`, `idx_documentos_eixoid`, `idx_documentos_iconeid`, `idx_documentos_ativo`, `idx_documento_tags_doc`, `idx_documento_tags_tag`)
 - **Seed data** — inserção automática dos 3 eixos, 15 categorias, 10 tags, 29 ícones, 12 documentos e relações documento-tags
 
-## Armazenamento Local (IndexedDB)
+## Armazenamento Local
+
+### IndexedDB
 
 - **Banco**: `edubase` (versão 2)
 - **Store `bookmarks`**: armazena documentos salvos com `docId` como keyPath e índice `saved_at`
@@ -156,6 +182,13 @@ Dentro de cada eixo:
   - Operações: `addRemovida`, `isRemovida`, `getTodasRemovidas`
   - Evita que notificações removidas reapareçam ao reabrir o painel
 - Persiste entre sessões sem necessidade de login
+
+### localStorage
+
+- **Chave `edubase_dica_atual`**: armazena a dica do dia atual com timestamp
+  - Formato: `{ texto: string, timestamp: number }`
+  - Usado para persistir a dica entre recarregamentos da página
+  - Expira após 5 minutos (nova dica é sorteada automaticamente)
 
 ## Arquitetura
 
@@ -177,6 +210,8 @@ Engine de renderização — maior arquivo do projeto:
 - `renderFavoritos()` — lista de bookmarks com estado vazio
 - `renderCadastro()` — formulário completo de cadastro com seletores de eixo, categoria, ícone e tags
 - `abrirNotificacoes()` — painel overlay com notificações, remoção e swipe-to-dismiss
+- `getDicaAtual()` — gerencia rotação da dica do dia com persistência em localStorage
+- `getRandomDica()` — seleciona frase aleatória do array `DICAS_EDUCACAO`
 - Funções auxiliares: `renderHeader`, `renderDocCard`, `renderSearchBar`, `renderCategoriasScroll`, `renderModalFiltro`, `renderDica`, etc.
 
 ### `js/api.js`
@@ -211,6 +246,7 @@ Dados mock de demonstração (`MOCK_DATA`):
 - 10 tags com nome e cor
 - 29 ícones com nome e descrição
 - 12 documentos com título, descrição, URL, tipo, tags, iconeid, etc.
+- **`DICAS_EDUCACAO`** — array com 21 frases sobre educação inclusiva para rotação da Dica do Dia
 
 ### `supabase/schema.sql`
 Schema completo do banco de dados para execução no SQL Editor do Supabase:
@@ -226,6 +262,7 @@ Usuário → app.js (rota) → views.js (render) → api.js (dados)
                                                      └── MOCK_DATA (fallback local)
                               → store.js (IndexedDB) → bookmarks
                                                       → notificacoes_removidas
+                              → localStorage → dica atual (com timestamp)
 ```
 
 ## Como Configurar o Supabase
@@ -259,7 +296,7 @@ O app foi projetado para GitHub Pages:
 │   ├── api.js                # Camada de dados Supabase/mock
 │   ├── store.js              # IndexedDB para favoritos e notificações
 │   ├── icons.js              # 29 ícones SVG e temas dos eixos
-│   ├── data.js               # Dados mock de demonstração
+│   ├── data.js               # Dados mock e array DICAS_EDUCACAO
 │   ├── config.js             # Configuração Supabase (preencher)
 │   └── config.example.js     # Template de configuração
 ├── supabase/
