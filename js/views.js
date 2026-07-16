@@ -768,9 +768,9 @@ const Views = (() => {
                   </div>
                 </div>
                 <div class="doc-manage-actions">
-                  <button class="btn-icon-sm" data-action="edit-doc" data-doc-id="${d.id}" title="Editar">
-                    ${icon('pencil-case')}
-                  </button>
+<button class="btn-icon-sm" data-action="edit-doc" data-doc-id="${d.id}" title="Editar">
+                ${icon('notebook-pen')}
+              </button>
                   <button class="btn-icon-sm danger" data-action="delete-doc" data-doc-id="${d.id}" data-doc-titulo="${d.titulo}" title="Excluir">
                     ${icon('trash-2')}
                   </button>

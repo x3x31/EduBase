@@ -1851,6 +1851,8 @@ img {
 
 .doc-manage-actions {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 6px;
   flex-shrink: 0;
 }
