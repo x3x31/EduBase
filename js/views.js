@@ -76,8 +76,7 @@ const Views = (() => {
         <div class="dica-text">
           <strong>💡 Dica do dia</strong>
           <span>${texto}</span>
-        </div>
-        <div class="dica-arrow">${icon('chevron-right')}</div>
+        </div>        
       </div>
     `;
   }
@@ -104,8 +103,7 @@ const Views = (() => {
         <div class="objetivo-text">
           <h3>Nosso objetivo</h3>
           <p>Fortalecer a educação inclusiva na prática, oferecendo acesso a documentos, estratégias e recursos pedagógicos.</p>
-        </div>
-        <div class="objetivo-arrow">${icon('arrow-right')}</div>
+        </div>        
       </div>
     `;
   }
