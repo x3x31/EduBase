@@ -2,6 +2,7 @@ const Views = (() => {
   let currentEixoId = null;
   let currentCategoriaId = null;
   let _iconeCache = null;
+  let _dicaTimerId = null;
 
   async function getIconeMap() {
     if (!_iconeCache) {
@@ -17,6 +18,35 @@ const Views = (() => {
   function getIconeEmoji(iconeId) {
     if (_iconeCache && _iconeCache[iconeId]) return _iconeCache[iconeId];
     return '📄';
+  }
+
+  const DICA_STORAGE_KEY = 'edubase_dica_atual';
+  const TEMPO_TROCA_MS = 5 * 60 * 1000;
+
+  function getRandomDica() {
+    const index = Math.floor(Math.random() * DICAS_EDUCACAO.length);
+    return DICAS_EDUCACAO[index];
+  }
+
+  function getDicaAtual() {
+    const agora = Date.now();
+    const salva = localStorage.getItem(DICA_STORAGE_KEY);
+
+    if (salva) {
+      try {
+        const { texto, timestamp } = JSON.parse(salva);
+        if (agora - timestamp < TEMPO_TROCA_MS) {
+          return texto;
+        }
+      } catch (e) {}
+    }
+
+    const nova = getRandomDica();
+    localStorage.setItem(DICA_STORAGE_KEY, JSON.stringify({
+      texto: nova,
+      timestamp: agora
+    }));
+    return nova;
   }
 
   function getApp() {
@@ -159,9 +189,17 @@ const Views = (() => {
           ${eixos.map(e => renderEixoCard(e)).join('')}
         </div>
       </section>
-      ${renderDica(eixos[0] ? eixos[0].dica : 'Explore os eixos para encontrar materiais relevantes.')}
+      ${renderDica(getDicaAtual())}
       </div>
     `;
+
+    if (_dicaTimerId) clearInterval(_dicaTimerId);
+    _dicaTimerId = setInterval(() => {
+      const dicaEl = document.querySelector('.dica-text span');
+      if (dicaEl) {
+        dicaEl.textContent = getDicaAtual();
+      }
+    }, TEMPO_TROCA_MS);
   }
 
   function renderHeroEixo(eixo) {

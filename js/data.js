@@ -198,3 +198,27 @@ const MOCK_DATA = {
     { id: 12, categoriaid: 15, eixoid: 3, titulo: 'Jogos Cooperativos Inclusivos', descricao: 'Atividades lúdicas que promovem a participação de todos os estudantes.', url: 'https://www.gov.br/mec/pt-br/escolas-educacao-basica/educacao-especial', tipo: 'site', autor_origem: 'PROFEI/UERN', iconeid: 120, tags: [{ nome: 'Ensino colaborativo', cor: '#E8F5E9' }] }
   ]
 };
+
+const DICAS_EDUCACAO = [
+  'Conhecer os documentos legais é o primeiro passo para garantir direitos e promover práticas pedagógicas inclusivas.',
+  'Combine diferentes estratégias pedagógicas para atender às diversidades da sua turma.',
+  'Adapte as atividades às necessidades dos alunos, mantendo os objetivos de aprendizagem.',
+  'A adaptação curricular não é reduzir conteúdo, mas adequar objetivos às necessidades individuais.',
+  'Use recursos multissensoriais para tornar o conteúdo acessível a todos os alunos.',
+  'Avaliações inclusivas devem considerar diferentes formas de demonstrar o conhecimento.',
+  'A comunicação alternativa e aumentativa é uma ferramenta poderosa para inclusão.',
+  'Planeje aulas com flexibilidade — a diversidade é uma oportunidade de aprendizado.',
+  'Tecnologias assistivas podem transformar a experiência de aprendizagem dos alunos.',
+  'Inclua atividades em grupo que promovam interação e valorização das diferenças.',
+  'A formação continuada do professor é fundamental para educação inclusiva de qualidade.',
+  'Documente as adaptações realizadas para garantir continuidade do acompanhamento pedagógico.',
+  'Ouvir o aluno e sua família é essencial para planejar intervenções eficazes.',
+  'Utilize recursos visuais e concretos para facilitar a compreensão de conceitos abstratos.',
+  'Promova a autonomia dos alunos com deficiência estimulando a tomada de decisão.',
+  'O ambiente de aprendizagem deve ser acessível física e pedagogicamente.',
+  'A individualização do ensino não significa perder o ritmo da turma como um todo.',
+  'Parcerias com profissionais especializados enriquecem o processo de inclusão.',
+  'Celebre pequenas conquistas — cada avanço é um passo em direção à inclusão.',
+  'Conheça as deficiências e necessidades dos seus alunos para oferecer o melhor suporte.',
+  'A inclusão começa na atitude: tratamento respeitoso e igualdade de oportunidades.',
+];
