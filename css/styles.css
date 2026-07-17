@@ -691,6 +691,10 @@ img {
   width: 24px;
   height: 24px;
 }
+
+.categoria-icon-green  { background: #f0fdf4; color: #1b5e4b; }
+.categoria-icon-purple { background: #f2f0ff; color: #624693; }
+.categoria-icon-orange { background: #fff8f0; color: #e8752a; }
 .categoria-card h3 {
   font-size: 12px;
   font-weight: 700;
@@ -1507,6 +1511,14 @@ img {
   height: 16px;
 }
 
+.categoria-icon-green  { background: #f0fdf4; color: #1b5e4b; }
+.categoria-icon-purple { background: #f2f0ff; color: #624693; }
+.categoria-icon-orange { background: #fff8f0; color: #e8752a; }
+
+.categoria-option-icon-green  { color: #1b5e4b; }
+.categoria-option-icon-purple { color: #624693; }
+.categoria-option-icon-orange { color: #e8752a; }
+
 .categoria-option span {
   font-size: 12px;
 }
@@ -1788,6 +1800,10 @@ img {
   border-radius: var(--radius-sm);
   flex-shrink: 0;
 }
+
+.doc-manage-emoji-green  { background: #f0fdf4; }
+.doc-manage-emoji-purple { background: #f2f0ff; }
+.doc-manage-emoji-orange { background: #fff8f0; }
 
 .doc-manage-info {
   flex: 1;

@@ -701,11 +701,13 @@ const Views = (() => {
         return `<p class="form-hint">Selecione um eixo primeiro</p>`;
       }
       const cats = eixosCategorias[selectedEixoId] || [];
+      const theme = EIXO_THEMES[selectedEixoId];
+      const iconClass = theme ? 'categoria-option-icon-' + theme.class : '';
       return `
         <div class="categoria-selector">
           ${cats.map(c => `
               <div class="categoria-option ${selectedCategoriaId === c.id ? 'selected' : ''}" data-categoria-id="${c.id}">
-                <div class="categoria-option-icon">${icon(c.icone)}</div>
+                <div class="categoria-option-icon ${iconClass}">${icon(c.icone)}</div>
                 <span>${c.nome}</span>
               </div>
             `).join('')}
@@ -754,11 +756,12 @@ const Views = (() => {
           ${filtered.map(d => {
             const emoji = getIconeEmoji(d.iconeid);
             const badgeClass = getEixoBadgeClass(d.eixoid);
+            const emojiClass = badgeClass.replace('doc-eixo-badge-', 'doc-manage-emoji-');
             const eixoNome = getEixoNome(d.eixoid);
             const catNome = getCategoriaNome(d.categoriaid);
             return `
               <div class="doc-manage-item" data-doc-id="${d.id}">
-                <div class="doc-manage-emoji">${emoji}</div>
+                <div class="doc-manage-emoji ${emojiClass}">${emoji}</div>
                 <div class="doc-manage-info">
                   <h4>${d.titulo}</h4>
                   <p>${d.descricao || ''}</p>
