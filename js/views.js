@@ -227,8 +227,8 @@ const Views = (() => {
   function renderDocCard(doc, index) {
     const theme = EIXO_THEMES[doc.eixoid];
     const thumbClass = theme ? `doc-thumb-${theme.class}` : '';
-    const tipoClass = doc.tipo === 'PDF' ? 'doc-tag-pdf' : 'doc-tag-online';
-    const tipoLabel = doc.tipo === 'PDF' ? 'PDF' : 'Online';
+    const tipoClass = doc.tipo === 'PDF' ? 'doc-tag-pdf' : 'doc-tag-site';
+    const tipoLabel = doc.tipo === 'PDF' ? 'PDF' : 'site';
     const tags = [`<span class="doc-tag ${tipoClass}">${tipoLabel}</span>`, ...(doc.tags || []).map(t => `<span class="doc-tag" style="background:${t.cor || '#E8F5E9'}">${t.nome}</span>`)].join('');
     const eixoClass = theme ? `doc-card-eixo-${theme.class}` : '';
     const emoji = getIconeEmoji(doc.iconeid);
@@ -771,6 +771,8 @@ const Views = (() => {
             const emoji = getIconeEmoji(d.iconeid);
             const badgeClass = getEixoBadgeClass(d.eixoid);
             const emojiClass = badgeClass.replace('doc-eixo-badge-', 'doc-manage-emoji-');
+            const tipoClass = d.tipo === 'PDF' ? 'doc-tag-pdf' : 'doc-tag-site';
+            const tipoLabel = d.tipo === 'PDF' ? 'PDF' : 'site';
             const eixoNome = getEixoNome(d.eixoid);
             const catNome = getCategoriaNome(d.categoriaid);
             return `
@@ -780,6 +782,7 @@ const Views = (() => {
                   <h4>${d.titulo}</h4>
                   <p>${d.descricao || ''}</p>
                   <div class="doc-manage-meta">
+                    <span class="doc-tag ${tipoClass}">${tipoLabel}</span>
                     <span class="doc-eixo-badge ${badgeClass}">${eixoNome}</span>
                     ${catNome ? `<span class="doc-cat-label">${catNome}</span>` : ''}
                   </div>
