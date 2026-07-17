@@ -137,7 +137,7 @@ BEGIN
 
   RETURN NULL;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 DROP TRIGGER IF EXISTS trg_atualizar_total_documentos ON documentos;
 CREATE TRIGGER trg_atualizar_total_documentos
@@ -304,8 +304,8 @@ INSERT INTO icone (emoji, nome, descricao) VALUES
 ('📜', 'pergaminho',       'Pergaminho — Leis federais (LDB, ECA, Estatuto da Pessoa com Deficiência)'),
 ('📕', 'livro-vermelho',   'Livro vermelho — Código Civil, Constituição ou regimento interno'),
 ('🏛️', 'predio-constitucional', 'Prédio constitucional — Decisões de tribunais, Ministério Público'),
-('👨\u200D⚖️', 'juiz',      'Juiz — Sentenças judiciais, liminares e mandados de segurança'),
-('👩\u200D⚖️', 'juiza',     'Juíza — Atas de audiência e determinações do Poder Judiciário'),
+('👨', 'juiz',      'Juiz — Sentenças judiciais, liminares e mandados de segurança'),
+('👩', 'juiza',     'Juíza — Atas de audiência e determinações do Poder Judiciário'),
 ('🛡️', 'escudo',           'Escudo — Medidas de proteção ao menor, garantias legais'),
 ('📑', 'separadores',      'Separadores — Decretos, portarias normativas e emendas'),
 ('✒️', 'caneta-tinteiro',  'Caneta tinteiro — Assinatura de termos de ajustamento de conduta (TAC)'),
@@ -328,7 +328,7 @@ INSERT INTO icone (emoji, nome, descricao) VALUES
 ('🧏', 'pessoa-surda',     'Pessoa surda — Relatórios de intérpretes e tradutores de Libras oficiais'),
 ('🦯', 'bengala-branca',   'Bengala branca — Documentos de estudantes com deficiência visual ou cegueira'),
 ('👁️', 'olho-adaptacoes',  'Olho — Adaptações de layout (textos ampliados ou material em Braille)'),
-('🐕\u200D🦺', 'cao-guia', 'Cão-guia — Autorizações legais para o trânsito de animais de assistência'),
+('🐕', 'cao-guia', 'Cão-guia — Autorizações legais para o trânsito de animais de assistência'),
 ('👣', 'pegadas',          'Pegadas — Relatórios de evolução psicomotora e fisioterapia'),
 ('🌈', 'arco-iris',        'Arco-íris — Transtornos globais do desenvolvimento e neurodiversidade geral'),
 ('💡', 'lampada-ahsd',     'Lâmpada — Estudantes com Altas Habilidades / Superdotação identificados'),
@@ -364,7 +364,7 @@ INSERT INTO icone (emoji, nome, descricao) VALUES
 ('👶', 'bebe',             'Bebê — Documentação da Educação Infantil (Creche)'),
 ('🧒', 'crianca',          'Criança — Documentos do Ensino Fundamental I (Anos Iniciais)'),
 ('🧑', 'adolescente',      'Adolescente — Documentos do Ensino Fundamental II (Anos Finais)'),
-('🧑\u200D🎓', 'estudante', 'Estudante — Documentos do Ensino Médio'),
+('🧑', 'estudante', 'Estudante — Documentos do Ensino Médio'),
 ('🎒', 'mochila',          'Mochila — Listas de materiais e termos de uso de uniforme'),
 ('🏫', 'escola',           'Escola — Projetos Político-Pedagógicos (PPP) institucionais'),
 ('🚌', 'onibus-escolar',   'Ônibus escolar — Autorizações de transporte escolar e viagens de estudo'),
