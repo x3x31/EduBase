@@ -752,16 +752,20 @@ img {
   box-shadow: var(--shadow);
 }
 .doc-thumb {
-  width: 56px;
-  height: 56px;
+  width: 44px;
+  height: 44px;
   border-radius: var(--radius-sm);
-  background: var(--primary-light);
+  background: var(--primary-bg);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 24px;
   flex-shrink: 0;
 }
+
+.doc-thumb-green  { background: #f0fdf4; }
+.doc-thumb-purple { background: #f2f0ff; }
+.doc-thumb-orange { background: #fff8f0; }
 .doc-card-destaque-info {
   flex: 1;
   min-width: 0;
@@ -793,6 +797,16 @@ img {
   padding: 3px 8px;
   border-radius: 50px;
   color: var(--primary);
+}
+
+.doc-tag-pdf {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.doc-tag-online {
+  background: #dbeafe;
+  color: #2563eb;
 }
 
 .doc-card-eixo-green .doc-tag {

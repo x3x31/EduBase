@@ -225,12 +225,16 @@ const Views = (() => {
   }
 
   function renderDocCard(doc, index) {
-    const tags = (doc.tags || []).map(t => `<span class="doc-tag" style="background:${t.cor || '#E8F5E9'}">${t.nome}</span>`).join('');
-    const eixoClass = EIXO_THEMES[doc.eixoid] ? `doc-card-eixo-${EIXO_THEMES[doc.eixoid].class}` : '';
+    const theme = EIXO_THEMES[doc.eixoid];
+    const thumbClass = theme ? `doc-thumb-${theme.class}` : '';
+    const tipoClass = doc.tipo === 'PDF' ? 'doc-tag-pdf' : 'doc-tag-online';
+    const tipoLabel = doc.tipo === 'PDF' ? 'PDF' : 'Online';
+    const tags = [`<span class="doc-tag ${tipoClass}">${tipoLabel}</span>`, ...(doc.tags || []).map(t => `<span class="doc-tag" style="background:${t.cor || '#E8F5E9'}">${t.nome}</span>`)].join('');
+    const eixoClass = theme ? `doc-card-eixo-${theme.class}` : '';
     const emoji = getIconeEmoji(doc.iconeid);
     return `
       <div class="doc-card-destaque ${eixoClass}" data-doc-id="${doc.id}">
-        <div class="doc-thumb">${emoji}</div>
+        <div class="doc-thumb ${thumbClass}">${emoji}</div>
         <div class="doc-card-destaque-info">
           <h3>${doc.titulo}</h3>
           <p>${doc.descricao || ''}</p>
