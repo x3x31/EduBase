@@ -1496,6 +1496,10 @@ img {
   font-weight: 600;
 }
 
+.categoria-option.selected.theme-green  { border-color: #1b5e4b; background: #f0fdf4; color: #1b5e4b; }
+.categoria-option.selected.theme-purple { border-color: #624693; background: #f2f0ff; color: #624693; }
+.categoria-option.selected.theme-orange { border-color: #e8752a; background: #fff8f0; color: #e8752a; }
+
 .categoria-option-icon {
   width: 28px;
   height: 28px;

@@ -705,12 +705,16 @@ const Views = (() => {
       const iconClass = theme ? 'categoria-option-icon-' + theme.class : '';
       return `
         <div class="categoria-selector">
-          ${cats.map(c => `
-              <div class="categoria-option ${selectedCategoriaId === c.id ? 'selected' : ''}" data-categoria-id="${c.id}">
+          ${cats.map(c => {
+            const isSelected = selectedCategoriaId === c.id;
+            const selectedClass = isSelected ? 'selected theme-' + theme.class : '';
+            return `
+              <div class="categoria-option ${selectedClass}" data-categoria-id="${c.id}">
                 <div class="categoria-option-icon ${iconClass}">${icon(c.icone)}</div>
                 <span>${c.nome}</span>
               </div>
-            `).join('')}
+            `;
+          }).join('')}
         </div>
       `;
     }
