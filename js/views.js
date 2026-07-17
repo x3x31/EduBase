@@ -673,13 +673,19 @@ const Views = (() => {
     }
 
     function renderIconGrid() {
+      const theme = selectedEixoId ? EIXO_THEMES[selectedEixoId] : null;
+      const themeClass = theme ? 'theme-' + theme.class : '';
       return `
         <div class="icon-grid">
-          ${icones.map(ic => `
-            <div class="icon-option ${selectedIconeId === ic.id ? 'selected' : ''}" data-icone-id="${ic.id}">
-              <div class="icon-option-emoji">${ic.emoji}</div>
-            </div>
-          `).join('')}
+          ${icones.map(ic => {
+            const isSelected = selectedIconeId === ic.id;
+            const selectedClass = isSelected ? 'selected ' + themeClass : '';
+            return `
+              <div class="icon-option ${selectedClass}" data-icone-id="${ic.id}">
+                <div class="icon-option-emoji">${ic.emoji}</div>
+              </div>
+            `;
+          }).join('')}
         </div>
       `;
     }

@@ -1563,6 +1563,10 @@ img {
   background: var(--primary-bg);
 }
 
+.icon-option.selected.theme-green  { border-color: #1b5e4b; background: #f0fdf4; }
+.icon-option.selected.theme-purple { border-color: #624693; background: #f2f0ff; }
+.icon-option.selected.theme-orange { border-color: #e8752a; background: #fff8f0; }
+
 .icon-option-emoji {
   width: 32px;
   height: 32px;
@@ -1587,6 +1591,10 @@ img {
   color: var(--primary);
   font-weight: 600;
 }
+
+.icon-option.selected.theme-green .icon-option-name  { color: #1b5e4b; }
+.icon-option.selected.theme-purple .icon-option-name { color: #624693; }
+.icon-option.selected.theme-orange .icon-option-name { color: #e8752a; }
 
 /* ============================================================
    CADASTRO — CHIPS DE TAGS
