@@ -773,24 +773,19 @@ const Views = (() => {
             const emojiClass = badgeClass.replace('doc-eixo-badge-', 'doc-manage-emoji-');
             const tipoClass = d.tipo === 'PDF' ? 'doc-tag-pdf' : 'doc-tag-site';
             const tipoLabel = d.tipo === 'PDF' ? 'PDF' : 'site';
-            const eixoNome = getEixoNome(d.eixoid);
-            const catNome = getCategoriaNome(d.categoriaid);
+            const tags = [`<span class="doc-tag ${tipoClass}">${tipoLabel}</span>`, ...(d.tags || []).map(t => `<span class="doc-tag" style="background:${t.cor || '#E8F5E9'}">${t.nome}</span>`)].join('');
             return `
               <div class="doc-manage-item" data-doc-id="${d.id}">
                 <div class="doc-manage-emoji ${emojiClass}">${emoji}</div>
                 <div class="doc-manage-info">
                   <h4>${d.titulo}</h4>
                   <p>${d.descricao || ''}</p>
-                  <div class="doc-manage-meta">
-                    <span class="doc-tag ${tipoClass}">${tipoLabel}</span>
-                    <span class="doc-eixo-badge ${badgeClass}">${eixoNome}</span>
-                    ${catNome ? `<span class="doc-cat-label">${catNome}</span>` : ''}
-                  </div>
+                  <div class="doc-tags">${tags}</div>
                 </div>
                 <div class="doc-manage-actions">
-<button class="btn-icon-sm" data-action="edit-doc" data-doc-id="${d.id}" title="Editar">
-                ${icon('notebook-pen')}
-              </button>
+                  <button class="btn-icon-sm" data-action="edit-doc" data-doc-id="${d.id}" title="Editar">
+                    ${icon('notebook-pen')}
+                  </button>
                   <button class="btn-icon-sm danger" data-action="delete-doc" data-doc-id="${d.id}" data-doc-titulo="${d.titulo}" title="Excluir">
                     ${icon('trash-2')}
                   </button>
