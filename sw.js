@@ -1,4 +1,4 @@
-const CACHE_NAME = 'edubase-v2';
+const CACHE_NAME = 'edubase-v3';
 const ASSETS = [
   './',
   './index.html',

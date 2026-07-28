@@ -656,9 +656,12 @@ const Views = (() => {
             <button class="viewer-tool" id="viewer-print" title="Imprimir">${icon('printer')}</button>
           </div>
         ` : ''}
-        <div class="viewer-body">
+        <div class="viewer-body" id="viewer-body">
           ${isPDF
-            ? `<iframe id="viewer-iframe" src="${url}#toolbar=0" class="viewer-iframe" frameborder="0"></iframe>`
+            ? `<div class="viewer-pdf-container" id="viewer-pdf-container">
+                <div class="viewer-pdf-loading">Carregando PDF...</div>
+                <canvas id="viewer-canvas"></canvas>
+              </div>`
             : `<iframe id="viewer-iframe" src="${url}" class="viewer-iframe" frameborder="0"></iframe>`
           }
         </div>
@@ -672,16 +675,70 @@ const Views = (() => {
     `;
     document.body.appendChild(overlay);
 
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay || e.target.closest('#viewer-close')) {
+        overlay.remove();
+        if (pdfDoc) pdfDoc.destroy();
+      }
+    });
+
+    if (!isPDF) return;
+
+    let pdfDoc = null;
+    let currentPage = 1;
+    let totalPages = 0;
     let currentZoom = 100;
-    const iframe = document.getElementById('viewer-iframe');
+    const canvas = document.getElementById('viewer-canvas');
+    const ctx = canvas.getContext('2d');
+
+    if (typeof pdfjsLib === 'undefined') {
+      document.querySelector('.viewer-pdf-loading').textContent = 'Erro: PDF.js não carregou.';
+      return;
+    }
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    function tryLoadPdf(pdfUrl, attempt) {
+      const loadingTask = pdfjsLib.getDocument({ url: pdfUrl, mode: 'cors' });
+      loadingTask.promise.then(function (pdf) {
+        pdfDoc = pdf;
+        totalPages = pdf.numPages;
+        document.getElementById('viewer-page-info').textContent = `1 / ${totalPages}`;
+        document.querySelector('.viewer-pdf-loading').style.display = 'none';
+        renderPage(currentPage, currentZoom / 100);
+      }, function (err) {
+        if (attempt === 0) {
+          const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(pdfUrl);
+          tryLoadPdf(proxyUrl, 1);
+        } else {
+          const container = document.getElementById('viewer-pdf-container');
+          container.innerHTML = `
+            <div class="viewer-pdf-error">
+              <p>Não foi possível carregar o PDF neste modal.</p>
+              <a href="${url}" target="_blank" rel="noopener">${icon('arrow-right')} Abrir PDF</a>
+            </div>
+          `;
+        }
+      });
+    }
+
+    tryLoadPdf(url, 0);
+
+    function renderPage(num, scale) {
+      if (!pdfDoc) return;
+      pdfDoc.getPage(num).then(function (page) {
+        const viewport = page.getViewport({ scale: scale * 1.5 });
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+        const renderContext = { canvasContext: ctx, viewport: viewport };
+        page.render(renderContext);
+      });
+    }
 
     function updateZoom() {
-      if (iframe) {
-        iframe.style.transform = `scale(${currentZoom / 100})`;
-        iframe.style.transformOrigin = 'top left';
-        const label = document.getElementById('viewer-zoom-label');
-        if (label) label.textContent = currentZoom + '%';
-      }
+      const label = document.getElementById('viewer-zoom-label');
+      if (label) label.textContent = currentZoom + '%';
+      renderPage(currentPage, currentZoom / 100);
     }
 
     document.getElementById('viewer-zoom-in')?.addEventListener('click', () => {
@@ -691,13 +748,7 @@ const Views = (() => {
       if (currentZoom > 50) { currentZoom -= 25; updateZoom(); }
     });
     document.getElementById('viewer-print')?.addEventListener('click', () => {
-      if (iframe) iframe.contentWindow?.print();
-    });
-
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay || e.target.closest('#viewer-close')) {
-        overlay.remove();
-      }
+      window.open(url, '_blank');
     });
   }
 
