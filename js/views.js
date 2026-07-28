@@ -4,6 +4,10 @@ const Views = (() => {
   let _iconeCache = null;
   let _dicaTimerId = null;
 
+  function isSingleEixo() {
+    return typeof EIXO_DOCUMENTOS_ONLY !== 'undefined' && EIXO_DOCUMENTOS_ONLY;
+  }
+
   async function getIconeMap() {
     if (!_iconeCache) {
       const icones = await Api.getIcones();
@@ -172,23 +176,43 @@ const Views = (() => {
     const eixos = await Api.getEixos();
     const app = getApp();
     app.className = 'app theme-green';
+
+    const eixosSection = isSingleEixo() && eixos.length === 1
+      ? `
+        <section class="section">
+          <div class="section-header">
+            <div>
+              <h2>${eixos[0].nome}</h2>
+              <p>${eixos[0].descricao || ''}</p>
+            </div>
+            <a href="#/eixo/${eixos[0].id}" class="link-more">Acessar ${icon('chevron-right')}</a>
+          </div>
+          <div class="eixos-list">
+            ${renderEixoCard(eixos[0])}
+          </div>
+        </section>
+      `
+      : `
+        <section class="section">
+          <div class="section-header">
+            <div>
+              <h2>Eixos do EduBase</h2>
+              <p>Explore documentos, estratégias e recursos</p>
+            </div>
+            <a href="#/biblioteca" class="link-more">Ver todos ${icon('chevron-right')}</a>
+          </div>
+          <div class="eixos-list">
+            ${eixos.map(e => renderEixoCard(e)).join('')}
+          </div>
+        </section>
+      `;
+
     app.innerHTML = `
       <div class="view-transition">
       ${renderHeader()}
       ${renderHeroHome()}
       ${renderObjetivoCard()}
-      <section class="section">
-        <div class="section-header">
-          <div>
-            <h2>Eixos do EduBase</h2>
-            <p>Explore documentos, estratégias e recursos</p>
-          </div>
-          <a href="#/biblioteca" class="link-more">Ver todos ${icon('chevron-right')}</a>
-        </div>
-        <div class="eixos-list">
-          ${eixos.map(e => renderEixoCard(e)).join('')}
-        </div>
-      </section>
+      ${eixosSection}
       ${renderDica(getDicaAtual())}
       </div>
     `;
@@ -408,6 +432,19 @@ const Views = (() => {
     const app = getApp();
     app.className = 'app theme-green';
     const bibDocListHtml = await renderDocList(documentos);
+
+    const filtersHtml = isSingleEixo()
+      ? ''
+      : `
+        <div class="bib-filters" id="bib-filters">
+          <button class="bib-filter-chip active" data-eixo-id="">Todos</button>
+          ${eixos.map(e => {
+            const theme = EIXO_THEMES[e.id];
+            return `<button class="bib-filter-chip" data-eixo-id="${e.id}">${theme ? theme.emoji : ''} ${e.nome}</button>`;
+          }).join('')}
+        </div>
+      `;
+
     app.innerHTML = `
       <div class="view-transition">
       ${renderHeader()}
@@ -417,13 +454,7 @@ const Views = (() => {
           <input type="text" class="search-input" id="bib-search-input" placeholder="Buscar na biblioteca..." autocomplete="off">
         </div>
       </div>
-      <div class="bib-filters" id="bib-filters">
-        <button class="bib-filter-chip active" data-eixo-id="">Todos</button>
-        ${eixos.map(e => {
-          const theme = EIXO_THEMES[e.id];
-          return `<button class="bib-filter-chip" data-eixo-id="${e.id}">${theme ? theme.emoji : ''} ${e.nome}</button>`;
-        }).join('')}
-      </div>
+      ${filtersHtml}
       <section class="section">
         <div class="section-header">
           <div>
@@ -641,7 +672,7 @@ const Views = (() => {
     let editingDoc = null;
     let buscaLista = '';
 
-    let selectedEixoId = null;
+    let selectedEixoId = isSingleEixo() ? EIXO_DOCUMENTOS_ID : null;
     let selectedCategoriaId = null;
     let selectedIconeId = null;
     let selectedTagIds = new Set();
@@ -652,7 +683,7 @@ const Views = (() => {
     let formTipo = 'PDF';
 
     function resetFormState() {
-      selectedEixoId = null;
+      selectedEixoId = isSingleEixo() ? EIXO_DOCUMENTOS_ID : null;
       selectedCategoriaId = null;
       selectedIconeId = null;
       selectedTagIds = new Set();
@@ -857,8 +888,10 @@ const Views = (() => {
                 <div class="eixo-selector">
                   ${eixos.map(e => {
                     const theme = EIXO_THEMES[e.id];
+                    const hidden = isSingleEixo() && e.id !== EIXO_DOCUMENTOS_ID ? 'style="display:none"' : '';
+                    const autoSelected = isSingleEixo() && e.id === EIXO_DOCUMENTOS_ID;
                     return `
-                      <div class="eixo-option ${selectedEixoId === e.id ? 'selected theme-' + theme.class : ''}" data-eixo-id="${e.id}">
+                      <div class="eixo-option ${(autoSelected || selectedEixoId === e.id) ? 'selected theme-' + theme.class : ''}" data-eixo-id="${e.id}" ${hidden}>
                         <div class="eixo-option-emoji">${theme.emoji}</div>
                         <span>${e.nome}</span>
                       </div>

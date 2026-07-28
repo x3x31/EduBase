@@ -10,11 +10,18 @@ const Api = (() => {
     }
   }
 
+  function filterEixos(list) {
+    if (typeof EIXO_DOCUMENTOS_ONLY !== 'undefined' && EIXO_DOCUMENTOS_ONLY) {
+      return list.filter(e => e.id === EIXO_DOCUMENTOS_ID);
+    }
+    return list;
+  }
+
   async function getEixos() {
-    if (useMock) return MOCK_DATA.eixos;
+    if (useMock) return filterEixos(MOCK_DATA.eixos);
     const { data, error } = await supabase.from('eixos').select('*').order('ordem');
     if (error) throw error;
-    return data;
+    return filterEixos(data);
   }
 
   async function getEixo(id) {
@@ -54,6 +61,9 @@ const Api = (() => {
   }
 
   async function getDocumentos({ eixoId, categoriaId, busca } = {}) {
+    if (typeof EIXO_DOCUMENTOS_ONLY !== 'undefined' && EIXO_DOCUMENTOS_ONLY) {
+      eixoId = EIXO_DOCUMENTOS_ID;
+    }
     if (useMock) {
       let docs = [...MOCK_DATA.documentos];
       if (eixoId) docs = docs.filter(d => d.eixoid === Number(eixoId));
@@ -86,15 +96,21 @@ const Api = (() => {
 
   async function getDocumentosRecentes(limite = 15) {
     if (useMock) {
-      return [...MOCK_DATA.documentos]
-        .sort((a, b) => b.id - a.id)
-        .slice(0, limite);
+      let docs = [...MOCK_DATA.documentos];
+      if (typeof EIXO_DOCUMENTOS_ONLY !== 'undefined' && EIXO_DOCUMENTOS_ONLY) {
+        docs = docs.filter(d => d.eixoid === EIXO_DOCUMENTOS_ID);
+      }
+      return docs.sort((a, b) => b.id - a.id).slice(0, limite);
     }
-    const { data, error } = await supabase
+    let query = supabase
       .from('documentos_completo')
       .select('*')
       .order('datacadastro', { ascending: false })
       .limit(limite);
+    if (typeof EIXO_DOCUMENTOS_ONLY !== 'undefined' && EIXO_DOCUMENTOS_ONLY) {
+      query = query.eq('eixoid', EIXO_DOCUMENTOS_ID);
+    }
+    const { data, error } = await query;
     if (error) throw error;
     return data.map(d => ({
       ...d,
