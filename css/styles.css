@@ -467,7 +467,7 @@ img {
 .hero-eixo {
   margin: 0 16px;
   padding: 20px;
-  background: var(--primary-gradient);
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
   border-radius: var(--radius-lg);
   position: relative;
   overflow: hidden;
@@ -476,20 +476,20 @@ img {
 .hero-eixo-label {
   font-size: 12px;
   font-weight: 600;
-  color: var(--primary);
+  color: #1b5e4b;
   opacity: 0.8;
   margin-bottom: 4px;
 }
 .hero-eixo h1 {
   font-size: 20px;
   font-weight: 700;
-  color: var(--primary);
+  color: #1b5e4b;
   margin-bottom: 8px;
   max-width: 65%;
 }
 .hero-eixo p {
   font-size: 12px;
-  color: var(--primary-mid);
+  color: #2e7d5e;
   max-width: 65%;
   line-height: 1.5;
 }
@@ -503,7 +503,6 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 48px;
   opacity: 0.9;
 }
 
@@ -550,10 +549,10 @@ img {
   align-items: center;
   gap: 6px;
   padding: 12px 14px;
-  background: var(--primary-bg);
-  border: 1px solid var(--primary-light);
+  background: #f0fdf4;
+  border: 1px solid #e8f5e9;
   border-radius: var(--radius);
-  color: var(--primary);
+  color: #1b5e4b;
   font-size: 13px;
   font-weight: 600;
   white-space: nowrap;
@@ -605,12 +604,12 @@ img {
   width: 48px;
   height: 48px;
   margin: 0 auto 10px;
-  background: var(--primary-light);
+  background: #f0fdf4;
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--primary);
+  color: #1b5e4b;
 }
 .categoria-icon svg {
   width: 24px;
