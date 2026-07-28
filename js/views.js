@@ -653,15 +653,15 @@ const Views = (() => {
           </div>
           <button class="viewer-close" id="viewer-close">${icon('x')}</button>
         </div>
-        ${isPDF ? `
-          <div class="viewer-toolbar" id="viewer-toolbar">
-            <button class="viewer-tool" id="viewer-zoom-out" title="Diminuir zoom">−</button>
-            <span class="viewer-zoom-label" id="viewer-zoom-label">100%</span>
-            <button class="viewer-tool" id="viewer-zoom-in" title="Aumentar zoom">+</button>
+        <div class="viewer-toolbar" id="viewer-toolbar">
+          <button class="viewer-tool" id="viewer-zoom-out" title="Diminuir zoom">−</button>
+          <span class="viewer-zoom-label" id="viewer-zoom-label">100%</span>
+          <button class="viewer-tool" id="viewer-zoom-in" title="Aumentar zoom">+</button>
+          ${isPDF ? `
             <span class="viewer-page-info" id="viewer-page-info"></span>
             <button class="viewer-tool" id="viewer-print" title="Imprimir">${icon('printer')}</button>
-          </div>
-        ` : ''}
+          ` : ''}
+        </div>
         <div class="viewer-body" id="viewer-body">
           ${isPDF
             ? `<div class="viewer-pdf-container" id="viewer-pdf-container">
@@ -673,7 +673,7 @@ const Views = (() => {
         </div>
         <div class="viewer-footer" id="viewer-footer">
           ${isPDF
-            ? `<a href="${url}" target="_blank" rel="noopener" class="viewer-action-btn viewer-download">${icon('arrow-right')} Baixar PDF</a>`
+            ? `<a href="${url}" target="_blank" rel="noopener" class="viewer-action-btn viewer-download">${icon('eye')} Acessar PDF</a>`
             : `<a href="${url}" target="_blank" rel="noopener" class="viewer-action-btn viewer-access">${icon('eye')} Acessar site</a>`
           }
         </div>
@@ -696,13 +696,27 @@ const Views = (() => {
 
     function initSiteViewer(siteUrl, crossOrigin) {
       const iframe = document.getElementById('viewer-iframe');
-      const footer = document.getElementById('viewer-footer');
+      let currentZoom = 100;
 
       if (crossOrigin) {
         iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-forms');
       }
 
       iframe.src = siteUrl;
+
+      function updateSiteZoom() {
+        iframe.style.transform = `scale(${currentZoom / 100})`;
+        iframe.style.transformOrigin = 'top left';
+        const label = document.getElementById('viewer-zoom-label');
+        if (label) label.textContent = currentZoom + '%';
+      }
+
+      document.getElementById('viewer-zoom-in')?.addEventListener('click', () => {
+        if (currentZoom < 200) { currentZoom += 25; updateSiteZoom(); }
+      });
+      document.getElementById('viewer-zoom-out')?.addEventListener('click', () => {
+        if (currentZoom > 50) { currentZoom -= 25; updateSiteZoom(); }
+      });
 
       let loaded = false;
       iframe.addEventListener('load', function () {
