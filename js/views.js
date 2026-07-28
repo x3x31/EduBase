@@ -71,7 +71,7 @@ const Views = (() => {
     const brandHtml = `
       <div class="header-brand">
         <img src="assets/images/UERN.png" alt="UERN">
-        <img src="assets/images/PROFEI.png" alt="PROFEI">
+        <img src="assets/images/PROFEI.png" alt="PROFEI" style="height: 55px;">
       </div>
     `;
     if (showBack) {
