@@ -254,7 +254,6 @@ INSERT INTO categorias (eixoid, nome, icone, ordem) VALUES
 -- ============================================================
 
 INSERT INTO tags (nome, cor) VALUES
-('PDF',              '#E8F5E9'),
 ('Colaboração',      '#EDE7F6'),
 ('Planejamento',     '#FFF3E0'),
 ('Metodologia',      '#E3F2FD'),
