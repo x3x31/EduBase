@@ -86,11 +86,13 @@ const App = (() => {
       await Store.removeBookmark(docId);
     } else {
       bookmark.classList.add('saved');
-      let doc = getDocById(docId);
+      let doc = null;
+      const json = bookmark.dataset.doc;
+      if (json) {
+        try { doc = JSON.parse(json); } catch (e) { /* ignore */ }
+      }
       if (!doc) {
-        const all = await Store.getAllBookmarks();
-        doc = all.find(d => d.docId === docId);
-        if (doc) doc = { id: doc.docId, ...doc };
+        doc = (MOCK_DATA.documentos || []).find(d => d.id === docId) || null;
       }
       if (doc) await Store.addBookmark(doc);
     }

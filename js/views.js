@@ -250,7 +250,7 @@ const Views = (() => {
           <div class="doc-tags">${tags}</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex-shrink:0">
-          <button class="btn-bookmark ${doc._saved ? 'saved' : ''}" data-action="bookmark" data-doc-id="${doc.id}">
+          <button class="btn-bookmark ${doc._saved ? 'saved' : ''}" data-action="bookmark" data-doc-id="${doc.id}" data-doc='${JSON.stringify({ id: doc.id, titulo: doc.titulo, descricao: doc.descricao || '', url: doc.url, tipo: doc.tipo || '', autor_origem: doc.autor_origem || '', iconeid: doc.iconeid, tags: doc.tags || [], eixoid: doc.eixoid })}'>
             ${icon('bookmark')}
           </button>
           <button class="btn-visualizar" data-action="visualizar" data-url="${doc.url}" data-doc-id="${doc.id}" data-title="${doc.titulo}" data-tipo="${doc.tipo || ''}" data-tags='${JSON.stringify(doc.tags || [])}' data-icone="${doc.iconeid}">
