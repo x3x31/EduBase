@@ -70,6 +70,17 @@ const Store = (() => {
     });
   }
 
+  async function getAllBookmarkIds() {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_BOOKMARKS, 'readonly');
+      const store = tx.objectStore(STORE_BOOKMARKS);
+      const request = store.getAllKeys();
+      request.onsuccess = () => resolve(request.result || []);
+      request.onerror = () => reject(request.error);
+    });
+  }
+
   async function isBookmarked(docId) {
     const db = await openDB();
     return new Promise((resolve, reject) => {
@@ -114,5 +125,5 @@ const Store = (() => {
     });
   }
 
-  return { addBookmark, removeBookmark, getAllBookmarks, isBookmarked, addRemovida, isRemovida, getTodasRemovidas };
+  return { addBookmark, removeBookmark, getAllBookmarks, getAllBookmarkIds, isBookmarked, addRemovida, isRemovida, getTodasRemovidas };
 })();

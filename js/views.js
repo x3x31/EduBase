@@ -479,20 +479,27 @@ const Views = (() => {
   async function renderFavoritos() {
     showLoading();
     await getIconeMap();
-    const bookmarks = await Store.getAllBookmarks();
+    const bookmarks = await Store.getAllBookmarkIds();
     const app = getApp();
     app.className = 'app theme-green';
-    const content = bookmarks.length > 0
+
+    let docs = [];
+    if (bookmarks.length > 0) {
+      const allDocs = await Api.getDocumentos({});
+      docs = allDocs.filter(d => bookmarks.includes(d.id));
+    }
+
+    const content = docs.length > 0
       ? `
         <section class="section">
           <div class="section-header">
             <div>
               <h2>Meus favoritos</h2>
-              <p>${bookmarks.length} documento(s) salvo(s)</p>
+              <p>${docs.length} documento(s) salvo(s)</p>
             </div>
           </div>
           <div class="doc-list-destaque">
-            ${bookmarks.map((d, i) => renderDocCard({ ...d, _saved: true, id: d.docId }, i)).join('')}
+            ${docs.map((d, i) => renderDocCard({ ...d, _saved: true }, i)).join('')}
           </div>
         </section>
       `
