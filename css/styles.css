@@ -617,7 +617,7 @@ img {
   height: 24px;
 }
 
-.categoria-icon-green  { background: #e3f2fd; color: #1565c0; }
+.categoria-icon-green  { background: #f0fdf4; color: #1b5e4b; }
 .categoria-icon-purple { background: #f2f0ff; color: #624693; }
 .categoria-icon-orange { background: #fff8f0; color: #e8752a; }
 .categoria-card h3 {
@@ -688,7 +688,7 @@ img {
   flex-shrink: 0;
 }
 
-.doc-thumb-green  { background: #e3f2fd; }
+.doc-thumb-green  { background: #f0fdf4; }
 .doc-thumb-purple { background: #f2f0ff; }
 .doc-thumb-orange { background: #fff8f0; }
 .doc-card-destaque-info {
@@ -735,7 +735,7 @@ img {
 }
 
 .doc-card-eixo-green .doc-tag {
-  color: #1565c0;
+  color: #1b5e4b;
 }
 .doc-card-eixo-purple .doc-tag {
   color: #624693;
@@ -757,20 +757,20 @@ img {
 }
 
 .doc-card-eixo-green .doc-thumb {
-  background: #e3f2fd;
+  background: #f0fdf4;
 }
 .doc-card-eixo-green .btn-bookmark {
-  color: #1565c0;
+  color: #1b5e4b;
 }
 .doc-card-eixo-green .btn-bookmark.saved svg {
-  fill: #1565c0;
+  fill: #1b5e4b;
 }
 .doc-card-eixo-green .btn-visualizar {
-  border-color: #1565c0;
-  color: #1565c0;
+  border-color: #1b5e4b;
+  color: #1b5e4b;
 }
 .doc-card-eixo-green .btn-visualizar:hover {
-  background: #e8f4fd;
+  background: #f0fdf4;
 }
 
 .doc-card-eixo-purple .doc-thumb {
@@ -1136,7 +1136,7 @@ img {
   flex-shrink: 0;
 }
 .doc-card-eixo-green .notif-thumb {
-  background: #e3f2fd;
+  background: #e8f5e9;
 }
 .doc-card-eixo-purple .notif-thumb {
   background: #ede7f6;
@@ -1173,7 +1173,7 @@ img {
   height: 16px;
 }
 .doc-card-eixo-green .notif-view {
-  color: #1565c0;
+  color: #1b5e4b;
 }
 .doc-card-eixo-purple .notif-view {
   color: #624693;
@@ -1396,8 +1396,8 @@ img {
 }
 
 .eixo-option.theme-green.selected {
-  border-color: #1565c0;
-  background: #e3f2fd;
+  border-color: #1b5e4b;
+  background: #f0fdf4;
 }
 .eixo-option.theme-purple.selected {
   border-color: #624693;
@@ -1451,7 +1451,7 @@ img {
   font-weight: 600;
 }
 
-.categoria-option.selected.theme-green  { border-color: #1565c0; background: #e3f2fd; color: #1565c0; }
+.categoria-option.selected.theme-green  { border-color: #1b5e4b; background: #f0fdf4; color: #1b5e4b; }
 .categoria-option.selected.theme-purple { border-color: #624693; background: #f2f0ff; color: #624693; }
 .categoria-option.selected.theme-orange { border-color: #e8752a; background: #fff8f0; color: #e8752a; }
 
@@ -1470,11 +1470,11 @@ img {
   height: 16px;
 }
 
-.categoria-icon-green  { background: #e3f2fd; color: #1565c0; }
+.categoria-icon-green  { background: #f0fdf4; color: #1b5e4b; }
 .categoria-icon-purple { background: #f2f0ff; color: #624693; }
 .categoria-icon-orange { background: #fff8f0; color: #e8752a; }
 
-.categoria-option-icon-green  { color: #1565c0; }
+.categoria-option-icon-green  { color: #1b5e4b; }
 .categoria-option-icon-purple { color: #624693; }
 .categoria-option-icon-orange { color: #e8752a; }
 
@@ -1518,7 +1518,7 @@ img {
   background: var(--primary-bg);
 }
 
-.icon-option.selected.theme-green  { border-color: #1565c0; background: #e3f2fd; }
+.icon-option.selected.theme-green  { border-color: #1b5e4b; background: #f0fdf4; }
 .icon-option.selected.theme-purple { border-color: #624693; background: #f2f0ff; }
 .icon-option.selected.theme-orange { border-color: #e8752a; background: #fff8f0; }
 
@@ -1547,7 +1547,7 @@ img {
   font-weight: 600;
 }
 
-.icon-option.selected.theme-green .icon-option-name  { color: #1565c0; }
+.icon-option.selected.theme-green .icon-option-name  { color: #1b5e4b; }
 .icon-option.selected.theme-purple .icon-option-name { color: #624693; }
 .icon-option.selected.theme-orange .icon-option-name { color: #e8752a; }
 
@@ -1768,7 +1768,7 @@ img {
   flex-shrink: 0;
 }
 
-.doc-manage-emoji-green  { background: #e3f2fd; }
+.doc-manage-emoji-green  { background: #f0fdf4; }
 .doc-manage-emoji-purple { background: #f2f0ff; }
 .doc-manage-emoji-orange { background: #fff8f0; }
 
@@ -1812,8 +1812,8 @@ img {
 }
 
 .doc-eixo-badge-green {
-  background: #e3f2fd;
-  color: #1565c0;
+  background: #f0fdf4;
+  color: #1b5e4b;
 }
 
 .doc-eixo-badge-purple {
