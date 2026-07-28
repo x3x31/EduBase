@@ -690,44 +690,50 @@ const Views = (() => {
     let currentZoom = 100;
     const canvas = document.getElementById('viewer-canvas');
     const ctx = canvas.getContext('2d');
+    const loadingEl = document.querySelector('.viewer-pdf-loading');
+    const container = document.getElementById('viewer-pdf-container');
 
     if (typeof pdfjsLib === 'undefined') {
-      document.querySelector('.viewer-pdf-loading').textContent = 'Erro: PDF.js não carregou.';
+      loadingEl.textContent = 'Erro: PDF.js não carregou.';
       return;
     }
 
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-    const PROXY_URLS = [
+    const PROXIES = [
       (u) => u,
       (u) => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
       (u) => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u)
     ];
 
-    function tryLoadPdf(pdfUrl, attempt) {
-      const loadingTask = pdfjsLib.getDocument({ url: pdfUrl, mode: 'cors', disableAutoFetch: false });
-      loadingTask.promise.then(function (pdf) {
-        pdfDoc = pdf;
-        totalPages = pdf.numPages;
-        document.getElementById('viewer-page-info').textContent = `1 / ${totalPages}`;
-        document.querySelector('.viewer-pdf-loading').style.display = 'none';
-        renderPage(currentPage, currentZoom / 100);
-      }, function (err) {
-        if (attempt < PROXY_URLS.length - 1) {
-          tryLoadPdf(PROXY_URLS[attempt + 1](url), attempt + 1);
-        } else {
-          const container = document.getElementById('viewer-pdf-container');
-          container.innerHTML = `
-            <div class="viewer-pdf-error">
-              <p>Não foi possível carregar o PDF neste modal.</p>
-              <a href="${url}" target="_blank" rel="noopener">${icon('arrow-right')} Abrir PDF</a>
-            </div>
-          `;
-        }
-      });
+    async function fetchPdfBytes(pdfUrl) {
+      const resp = await fetch(pdfUrl, { mode: 'cors' });
+      if (!resp.ok) throw new Error(resp.status);
+      return await resp.arrayBuffer();
     }
 
-    tryLoadPdf(PROXY_URLS[0](url), 0);
+    async function tryLoadPdf() {
+      for (let i = 0; i < PROXIES.length; i++) {
+        try {
+          const bytes = await fetchPdfBytes(PROXIES[i](url));
+          const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
+          pdfDoc = pdf;
+          totalPages = pdf.numPages;
+          document.getElementById('viewer-page-info').textContent = `1 / ${totalPages}`;
+          loadingEl.style.display = 'none';
+          renderPage(currentPage, currentZoom / 100);
+          return;
+        } catch (e) { /* try next proxy */ }
+      }
+      container.innerHTML = `
+        <div class="viewer-pdf-error">
+          <p>Não foi possível carregar o PDF neste modal.</p>
+          <a href="${url}" target="_blank" rel="noopener">${icon('arrow-right')} Abrir PDF</a>
+        </div>
+      `;
+    }
+
+    tryLoadPdf();
 
     function renderPage(num, scale) {
       if (!pdfDoc) return;
