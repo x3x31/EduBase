@@ -68,6 +68,12 @@ const Views = (() => {
   }
 
   function renderHeader(showBack = false) {
+    const brandHtml = `
+      <div class="header-brand">
+        <img src="assets/images/UERN.png" alt="UERN">
+        <img src="assets/images/PROFEI.png" alt="PROFEI">
+      </div>
+    `;
     if (showBack) {
       return `
         <header class="header">
@@ -75,11 +81,7 @@ const Views = (() => {
             ${icon('chevron-left')}
             Voltar
           </button>
-          <div class="header-brand">
-            <span class="logo-uern">UERN</span>
-            <div class="header-logo-circle">📚</div>
-            <div class="header-brand-text">EduBase</div>
-          </div>
+          ${brandHtml}
           <div class="header-notif" id="btn-notif">
             ${icon('bell')}
             <span class="badge"></span>
@@ -89,12 +91,7 @@ const Views = (() => {
     }
     return `
       <header class="header">
-        <div style="min-width:70px"></div>
-        <div class="header-brand">
-          <span class="logo-uern">UERN</span>
-          <div class="header-logo-circle">📚</div>
-            <div class="header-brand-text">EduBase</div>
-        </div>
+        ${brandHtml}
         <div class="header-notif" id="btn-notif">
           ${icon('bell')}
           <span class="badge"></span>
@@ -152,19 +149,7 @@ const Views = (() => {
           Começar agora
         </button>
         <div class="hero-illustration">
-          <div class="hero-book">
-            <div class="hero-book-base"></div>
-            <div class="hero-book-pages"></div>
-            <div class="hero-tree"></div>
-            <div class="hero-tree-leaves">
-              <div class="hero-leaf">📚</div>
-              <div class="hero-leaf">✏️</div>
-              <div class="hero-leaf">📖</div>
-              <div class="hero-leaf">🎯</div>
-              <div class="hero-leaf">💡</div>
-              <div class="hero-leaf">🧩</div>
-            </div>
-          </div>
+          <img src="assets/images/arvore.png" alt="">
         </div>
       </div>
     `;
