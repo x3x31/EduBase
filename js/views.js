@@ -668,7 +668,7 @@ const Views = (() => {
                 <div class="viewer-pdf-loading">Carregando PDF...</div>
                 <canvas id="viewer-canvas"></canvas>
               </div>`
-            : `<iframe id="viewer-iframe" class="viewer-iframe" style="width:100%;height:100%;border:none"></iframe>`
+            : `<div class="viewer-site-scroll" id="viewer-site-scroll"><iframe id="viewer-iframe" class="viewer-iframe"></iframe></div>`
           }
         </div>
         <div class="viewer-footer" id="viewer-footer">
@@ -696,6 +696,7 @@ const Views = (() => {
 
     function initSiteViewer(siteUrl, crossOrigin) {
       const iframe = document.getElementById('viewer-iframe');
+      const scrollWrap = document.getElementById('viewer-site-scroll');
       let currentZoom = 100;
 
       if (crossOrigin) {
@@ -705,7 +706,9 @@ const Views = (() => {
       iframe.src = siteUrl;
 
       function updateSiteZoom() {
-        iframe.style.zoom = (currentZoom / 100);
+        const s = currentZoom / 100;
+        scrollWrap.style.width = (s * 100) + '%';
+        scrollWrap.style.height = (s * 100) + '%';
         const label = document.getElementById('viewer-zoom-label');
         if (label) label.textContent = currentZoom + '%';
       }
