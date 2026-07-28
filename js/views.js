@@ -253,7 +253,7 @@ const Views = (() => {
           <button class="btn-bookmark ${doc._saved ? 'saved' : ''}" data-action="bookmark" data-doc-id="${doc.id}">
             ${icon('bookmark')}
           </button>
-          <button class="btn-visualizar" data-action="visualizar" data-url="${doc.url}" data-doc-id="${doc.id}">
+          <button class="btn-visualizar" data-action="visualizar" data-url="${doc.url}" data-doc-id="${doc.id}" data-title="${doc.titulo}" data-tipo="${doc.tipo || ''}" data-tags='${JSON.stringify(doc.tags || [])}' data-icone="${doc.iconeid}">
             ${icon('eye')}
           </button>
         </div>
@@ -542,7 +542,7 @@ const Views = (() => {
                         <strong>${d.titulo}</strong>
                         <span>${d.descricao ? d.descricao.substring(0, 60) + (d.descricao.length > 60 ? '...' : '') : ''}</span>
                       </div>
-                      <button class="notif-view" data-action="visualizar" data-url="${d.url}" data-doc-id="${d.id}">${icon('eye')}</button>
+                      <button class="notif-view" data-action="visualizar" data-url="${d.url}" data-doc-id="${d.id}" data-title="${d.titulo}" data-tipo="${d.tipo || ''}" data-tags='${JSON.stringify(d.tags || [])}' data-icone="${d.iconeid}">${icon('eye')}</button>
                       <button class="notif-remove" data-action="remover-notif" data-doc-id="${d.id}">${icon('trash-2')}</button>
                     </div>
                   </div>
@@ -571,9 +571,8 @@ const Views = (() => {
     overlay.addEventListener('click', function (e) {
       const btn = e.target.closest('[data-action="visualizar"]');
       if (btn) {
-        const url = btn.dataset.url;
-        if (url) window.open(url, '_blank');
         overlay.remove();
+        abrirVisualizador(btn);
         return;
       }
       const removeBtn = e.target.closest('[data-action="remover-notif"]');
@@ -620,13 +619,95 @@ const Views = (() => {
     }
   }
 
+  function abrirVisualizador(btn) {
+    const url = btn.dataset.url;
+    const titulo = btn.dataset.title || 'Documento';
+    const tipo = btn.dataset.tipo || '';
+    const tags = JSON.parse(btn.dataset.tags || '[]');
+    const iconeId = btn.dataset.icone || '';
+    const emoji = getIconeEmoji(Number(iconeId));
+    const isPDF = tipo === 'PDF';
+
+    const tagsHtml = [
+      `<span class="doc-tag ${isPDF ? 'doc-tag-pdf' : 'doc-tag-site'}">${isPDF ? 'PDF' : 'site'}</span>`,
+      ...tags.map(t => `<span class="doc-tag" style="background:${t.cor || '#E8F5E9'}">${t.nome}</span>`)
+    ].join('');
+
+    const overlay = document.createElement('div');
+    overlay.className = 'viewer-overlay';
+    overlay.innerHTML = `
+      <div class="viewer-modal">
+        <div class="viewer-header">
+          <div class="viewer-header-left">
+            <div class="viewer-emoji">${emoji}</div>
+            <div class="viewer-header-info">
+              <h3>${titulo}</h3>
+              <div class="doc-tags">${tagsHtml}</div>
+            </div>
+          </div>
+          <button class="viewer-close" id="viewer-close">${icon('x')}</button>
+        </div>
+        ${isPDF ? `
+          <div class="viewer-toolbar" id="viewer-toolbar">
+            <button class="viewer-tool" id="viewer-zoom-out" title="Diminuir zoom">−</button>
+            <span class="viewer-zoom-label" id="viewer-zoom-label">100%</span>
+            <button class="viewer-tool" id="viewer-zoom-in" title="Aumentar zoom">+</button>
+            <span class="viewer-page-info" id="viewer-page-info"></span>
+            <button class="viewer-tool" id="viewer-print" title="Imprimir">${icon('printer')}</button>
+          </div>
+        ` : ''}
+        <div class="viewer-body">
+          ${isPDF
+            ? `<iframe id="viewer-iframe" src="${url}#toolbar=0" class="viewer-iframe" frameborder="0"></iframe>`
+            : `<iframe id="viewer-iframe" src="${url}" class="viewer-iframe" frameborder="0"></iframe>`
+          }
+        </div>
+        <div class="viewer-footer">
+          ${isPDF
+            ? `<a href="${url}" target="_blank" rel="noopener" class="viewer-action-btn viewer-download">${icon('arrow-right')} Baixar PDF</a>`
+            : `<a href="${url}" target="_blank" rel="noopener" class="viewer-action-btn viewer-access">${icon('eye')} Acessar site</a>`
+          }
+        </div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    let currentZoom = 100;
+    const iframe = document.getElementById('viewer-iframe');
+
+    function updateZoom() {
+      if (iframe) {
+        iframe.style.transform = `scale(${currentZoom / 100})`;
+        iframe.style.transformOrigin = 'top left';
+        const label = document.getElementById('viewer-zoom-label');
+        if (label) label.textContent = currentZoom + '%';
+      }
+    }
+
+    document.getElementById('viewer-zoom-in')?.addEventListener('click', () => {
+      if (currentZoom < 200) { currentZoom += 25; updateZoom(); }
+    });
+    document.getElementById('viewer-zoom-out')?.addEventListener('click', () => {
+      if (currentZoom > 50) { currentZoom -= 25; updateZoom(); }
+    });
+    document.getElementById('viewer-print')?.addEventListener('click', () => {
+      if (iframe) iframe.contentWindow?.print();
+    });
+
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay || e.target.closest('#viewer-close')) {
+        overlay.remove();
+      }
+    });
+  }
+
   function init() {
     const app = getApp();
     app.addEventListener('click', function (e) {
       const btn = e.target.closest('[data-action="visualizar"]');
       if (btn) {
-        const url = btn.dataset.url;
-        if (url) window.open(url, '_blank');
+        e.preventDefault();
+        abrirVisualizador(btn);
         return;
       }
       const notifBtn = e.target.closest('#btn-notif');
