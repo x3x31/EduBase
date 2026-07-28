@@ -1009,7 +1009,7 @@ const Views = (() => {
       }
       app.innerHTML = `
         <div class="view-transition">
-        ${renderHeader(true)}
+        ${renderHeader()}
         <section class="section">
           <div class="cadastro-tabs">
             <button class="cadastro-tab ${activeTab === 'novo' ? 'active' : ''}" data-tab="novo">
