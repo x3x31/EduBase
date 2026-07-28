@@ -705,8 +705,7 @@ const Views = (() => {
       iframe.src = siteUrl;
 
       function updateSiteZoom() {
-        iframe.style.transform = `scale(${currentZoom / 100})`;
-        iframe.style.transformOrigin = 'top left';
+        iframe.style.zoom = (currentZoom / 100);
         const label = document.getElementById('viewer-zoom-label');
         if (label) label.textContent = currentZoom + '%';
       }

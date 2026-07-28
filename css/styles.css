@@ -2226,7 +2226,6 @@ img {
   height: 100%;
   border: none;
   background: white;
-  transition: transform 0.2s;
 }
 
 .viewer-footer {
