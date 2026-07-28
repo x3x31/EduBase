@@ -725,12 +725,9 @@ const Views = (() => {
           return;
         } catch (e) { /* try next proxy */ }
       }
-      container.innerHTML = `
-        <div class="viewer-pdf-error">
-          <p>Não foi possível carregar o PDF neste modal.</p>
-          <a href="${url}" target="_blank" rel="noopener">${icon('arrow-right')} Abrir PDF</a>
-        </div>
-      `;
+      const gviewUrl = 'https://docs.google.com/gview?url=' + encodeURIComponent(url) + '&embedded=true';
+      container.innerHTML = `<iframe src="${gviewUrl}" class="viewer-iframe" style="width:100%;height:100%;border:none"></iframe>`;
+      document.getElementById('viewer-toolbar').style.display = 'none';
     }
 
     tryLoadPdf();
