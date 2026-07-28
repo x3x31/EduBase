@@ -116,7 +116,7 @@ const Views = (() => {
     const theme = EIXO_THEMES[eixo.id];
     return `
       <div class="eixo-card ${theme.class}" onclick="App.navigate('#/eixo/${eixo.id}')">
-        <div class="eixo-card-icon"><img src="assets/images/documento.png" alt="" style="width:28px;height:28px;object-fit:contain"></div>
+        <div class="eixo-card-icon"><img src="assets/images/documento.png" alt="" style="width:50px;height:50px;object-fit:contain"></div>
         <div class="eixo-card-content">
           <div class="eixo-card-label">${theme.label}</div>
           <div class="eixo-card-title">${eixo.nome}</div>
@@ -218,7 +218,7 @@ const Views = (() => {
         <div class="hero-eixo-label">Eixo — ${theme.label}</div>
         <h1>${eixo.nome}</h1>
         <p>${eixo.descricao || ''}</p>
-        <div class="hero-eixo-art"><img src="assets/images/documento2.png" alt="" style="width:80px;height:80px;object-fit:contain"></div>
+        <div class="hero-eixo-art"><img src="assets/images/documento2.png" alt=""></div>
       </div>
     `;
   }
