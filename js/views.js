@@ -142,7 +142,7 @@ const Views = (() => {
   function renderHeroHome() {
     return `
       <div class="hero-home">
-        <h1>EduBase — Educação Inclusiva</h1>
+        <h1><span style="color:#022c74">Educação inclusiva</span><br><span style="color:#2180e0">na prática</span></h1>
         <p>Ferramentas, estratégias e recursos para transformar a sala de aula.</p>
         <button class="btn-outline" onclick="App.navigate('#/biblioteca')">
           <span class="play-icon">${icon('play-circle')}</span>
