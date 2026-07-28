@@ -698,8 +698,14 @@ const Views = (() => {
 
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
+    const PROXY_URLS = [
+      (u) => u,
+      (u) => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
+      (u) => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u)
+    ];
+
     function tryLoadPdf(pdfUrl, attempt) {
-      const loadingTask = pdfjsLib.getDocument({ url: pdfUrl, mode: 'cors' });
+      const loadingTask = pdfjsLib.getDocument({ url: pdfUrl, mode: 'cors', disableAutoFetch: false });
       loadingTask.promise.then(function (pdf) {
         pdfDoc = pdf;
         totalPages = pdf.numPages;
@@ -707,9 +713,8 @@ const Views = (() => {
         document.querySelector('.viewer-pdf-loading').style.display = 'none';
         renderPage(currentPage, currentZoom / 100);
       }, function (err) {
-        if (attempt === 0) {
-          const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(pdfUrl);
-          tryLoadPdf(proxyUrl, 1);
+        if (attempt < PROXY_URLS.length - 1) {
+          tryLoadPdf(PROXY_URLS[attempt + 1](url), attempt + 1);
         } else {
           const container = document.getElementById('viewer-pdf-container');
           container.innerHTML = `
@@ -722,7 +727,7 @@ const Views = (() => {
       });
     }
 
-    tryLoadPdf(url, 0);
+    tryLoadPdf(PROXY_URLS[0](url), 0);
 
     function renderPage(num, scale) {
       if (!pdfDoc) return;
