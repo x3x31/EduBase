@@ -238,7 +238,7 @@ const Views = (() => {
     const thumbClass = theme ? `doc-thumb-${theme.class}` : '';
     const tipoClass = doc.tipo === 'PDF' ? 'doc-tag-pdf' : 'doc-tag-site';
     const tipoLabel = doc.tipo === 'PDF' ? 'PDF' : 'site';
-    const tags = [`<span class="doc-tag ${tipoClass}">${tipoLabel}</span>`, ...(doc.tags || []).map(t => `<span class="doc-tag" style="background:${t.cor || '#E8F5E9'}">${t.nome}</span>`)].join('');
+    const tags = [`<span class="doc-tag ${tipoClass}">${tipoLabel}</span>`, ...(doc.tags || []).filter(t => t.nome !== tipoLabel).map(t => `<span class="doc-tag" style="background:${t.cor || '#E8F5E9'}">${t.nome}</span>`)].join('');
     const eixoClass = theme ? `doc-card-eixo-${theme.class}` : '';
     const emoji = getIconeEmoji(doc.iconeid);
     return `
