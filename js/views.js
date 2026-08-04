@@ -133,7 +133,7 @@ const Views = (() => {
         <div class="objetivo-icon">${icon('target')}</div>
         <div class="objetivo-text">
           <h3>Nosso objetivo</h3>
-          <p>Fortalecer a educação inclusiva na prática, oferecendo acesso a documentos, estratégias e recursos pedagógicos.</p>
+          <p>Desenvolver um recurso educacional que contribua para ampliar o acesso de professores(as) das escolas do campo às políticas voltadas à Educação Especial na Perspectiva da Educação Inclusiva.</p>
         </div>        
       </div>
     `;
@@ -142,8 +142,7 @@ const Views = (() => {
   function renderHeroHome() {
     return `
       <div class="hero-home">
-        <h1><span style="color:#022c74">Educação inclusiva</span><br><span style="color:#2180e0">na prática</span></h1>
-        <p>Ferramentas, estratégias e recursos para transformar a sala de aula.</p>
+        <h1><span style="color:#022c74">Educação Especial</span> <span style="color:#2180e0">Inclusiva</span></h1>
         <button class="btn-outline" onclick="App.navigate('#/biblioteca')">
           <span class="play-icon">${icon('play-circle')}</span>
           Começar agora

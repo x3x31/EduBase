@@ -1,7 +1,7 @@
 {
   "name": "EduBase — Educação Inclusiva",
   "short_name": "EduBase",
-  "description": "Ferramentas, estratégias e recursos para transformar a sala de aula.",
+  "description": "Educação Especial Inclusiva.",
   "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait",

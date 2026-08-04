@@ -209,8 +209,8 @@ GRANT SELECT ON documentos_completo TO anon, authenticated;
 -- ============================================================
 
 INSERT INTO eixos (id, nome, descricao, ordem, cor, icone, dica) VALUES
-(1, 'Documentos legais e curriculares',
- 'Normas, marcos legais e orientações que fundamentam a educação inclusiva e orientam a prática pedagógica.',
+(1, 'Documentos Normativos',
+ 'Políticas Públicas de Educação Especial Inclusiva.',
  1, '#1B5E4B', 'file-shield',
  'Conhecer os documentos legais é o primeiro passo para garantir direitos e promover práticas pedagógicas inclusivas.'),
 (2, 'Estratégias pedagógicas',

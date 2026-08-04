@@ -2,8 +2,8 @@ const MOCK_DATA = {
   eixos: [
     {
       id: 1, ordem: 1,
-      nome: 'Documentos legais e curriculares',
-      descricao: 'Normas, marcos legais e orientações que fundamentam a educação inclusiva e orientam a prática pedagógica.',
+      nome: 'Documentos Normativos',
+      descricao: 'Políticas Públicas de Educação Especial Inclusiva.',
       cor: '#1B5E4B', icone: 'file-shield',
       dica: 'Conhecer os documentos legais é o primeiro passo para garantir direitos e promover práticas pedagógicas inclusivas.'
     },
