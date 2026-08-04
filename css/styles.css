@@ -498,12 +498,18 @@ img {
   right: 12px;
   top: 50%;
   transform: translateY(-50%);
-  width: 100px;
-  height: 100px;
+  height: calc(100% - 40px);
+  max-width: 30%;
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0.9;
+}
+.hero-eixo-art img {
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
 }
 
 /* ============================================================
