@@ -702,13 +702,28 @@ const Views = (() => {
 
     function initSiteViewer(siteUrl, crossOrigin) {
       const iframe = document.getElementById('viewer-iframe');
+      const body = document.getElementById('viewer-body');
       let currentZoom = 100;
+      let loaded = false;
+      let fallbackShown = false;
+      const startTime = Date.now();
 
       if (crossOrigin) {
         iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-forms');
       }
 
       iframe.src = siteUrl;
+
+      function showSiteFallback() {
+        if (fallbackShown) return;
+        fallbackShown = true;
+        body.innerHTML = `
+          <div class="viewer-pdf-error">
+            <p>O site não permite ser visualizado dentro do aplicativo.</p>
+            <a href="${siteUrl}" target="_blank" rel="noopener">${icon('arrow-right')} Abrir site</a>
+          </div>
+        `;
+      }
 
       function updateSiteZoom() {
         iframe.style.zoom = (currentZoom / 100);
@@ -723,20 +738,30 @@ const Views = (() => {
         if (currentZoom > 50) { currentZoom -= 25; updateSiteZoom(); }
       });
 
-      let loaded = false;
+      if (crossOrigin) {
+        fetch(siteUrl, { method: 'HEAD' })
+          .then((resp) => {
+            const xfo = resp.headers.get('x-frame-options') || '';
+            const csp = resp.headers.get('content-security-policy') || '';
+            const blocked =
+              /(^|[,;]\s*)deny/i.test(xfo) ||
+              /(^|[,;]\s*)sameorigin/i.test(xfo) ||
+              /frame-ancestors\s+('none'|'self')([\s;,]|$)/i.test(csp);
+            if (blocked) showSiteFallback();
+          })
+          .catch(() => {});
+      }
+
       iframe.addEventListener('load', function () {
         loaded = true;
+        if (crossOrigin && !fallbackShown && Date.now() - startTime < 1000) {
+          showSiteFallback();
+        }
       });
 
       setTimeout(function () {
-        if (!loaded) {
-          const body = document.getElementById('viewer-body');
-          body.innerHTML = `
-            <div class="viewer-pdf-error">
-              <p>Não foi possível carregar o site neste modal.</p>
-              <a href="${siteUrl}" target="_blank" rel="noopener">${icon('arrow-right')} Abrir site</a>
-            </div>
-          `;
+        if (!loaded && !fallbackShown) {
+          showSiteFallback();
         }
       }, 10000);
     }
