@@ -1,4 +1,4 @@
-const CACHE_NAME = 'edubase-v4';
+const CACHE_NAME = 'edubase-v6';
 const ASSETS = [
   './',
   './index.html',
@@ -19,6 +19,11 @@ const ASSETS = [
   './assets/images/arvore.png',
   './assets/images/documento.png',
   './assets/images/documento2.png',
+  './assets/images/sobre.png',
+  './assets/images/sobre-sem-fundo.png',
+  './assets/images/recurso.png',
+  './assets/images/recurso-sem-fundo.png',
+  './assets/images/documento-sem-fundo.png',
   './assets/images/UERN.png',
   './assets/images/PROFEI.png'
 ];

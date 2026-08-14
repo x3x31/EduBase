@@ -28,6 +28,12 @@ const App = (() => {
       case '#/':
         Views.renderHome();
         break;
+      case '#/autora':
+        Views.renderAutora();
+        break;
+      case '#/recurso':
+        Views.renderRecurso();
+        break;
       case '#/biblioteca':
         Views.renderBiblioteca();
         break;

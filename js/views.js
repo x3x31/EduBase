@@ -116,7 +116,7 @@ const Views = (() => {
     const theme = EIXO_THEMES[eixo.id];
     return `
       <div class="eixo-card ${theme.class}" onclick="App.navigate('#/eixo/${eixo.id}')">
-        <div class="eixo-card-icon"><img src="assets/images/documento.png" alt="" style="width:50px;height:50px;object-fit:contain"></div>
+        <div class="eixo-card-icon"><img src="assets/images/documento-sem-fundo.png" alt="" style="width:150px;height:150px;object-fit:contain"></div>
         <div class="eixo-card-content">
           <div class="eixo-card-label">${theme.label}</div>
           <div class="eixo-card-title">${eixo.nome}</div>
@@ -127,16 +127,121 @@ const Views = (() => {
     `;
   }
 
-  function renderObjetivoCard() {
+  function renderInfoCard({ theme, label, title, desc, target, iconHtml }) {
     return `
-      <div class="objetivo-card">
-        <div class="objetivo-icon">${icon('target')}</div>
-        <div class="objetivo-text">
-          <h3>Nosso objetivo</h3>
-          <p>Desenvolver um recurso educacional que contribua para ampliar o acesso de professores(as) das escolas do campo às políticas voltadas à Educação Especial na Perspectiva da Educação Inclusiva.</p>
-        </div>        
+      <div class="eixo-card ${theme}" onclick="App.navigate('${target}')">
+        <div class="eixo-card-icon">${iconHtml}</div>
+        <div class="eixo-card-content">
+          <div class="eixo-card-label">${label}</div>
+          <div class="eixo-card-title">${title}</div>
+          <div class="eixo-card-desc">${desc}</div>
+        </div>
+        <div class="eixo-card-arrow">${icon('chevron-right')}</div>
       </div>
     `;
+  }
+
+  function renderInfoCardsSection() {
+    return `
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <h2>Explore o EduBase</h2>
+            <p>Conheça o recurso educacional e acesse os materiais</p>
+          </div>
+        </div>
+        <div class="eixos-list">
+          ${renderInfoCard({
+            theme: 'purple',
+            label: 'sobre',
+            title: 'Conheça a autora',
+            desc: 'Quem está por trás deste recurso educacional.',
+            target: '#/autora',
+            iconHtml: '<img src="assets/images/sobre-sem-fundo.png" alt="" style="width:150px;height:150px;object-fit:contain">'
+          })}
+          ${renderInfoCard({
+            theme: 'orange',
+            label: 'recurso',
+            title: 'Recurso educacional',
+            desc: 'Conheça o objetivo, o público-alvo e como utilizar o EduBase.',
+            target: '#/recurso',
+            iconHtml: '<img src="assets/images/recurso-sem-fundo.png" alt="" style="width:150px;height:150px;object-fit:contain">'
+          })}
+          ${renderInfoCard({
+            theme: 'green',
+            label: 'documentos',
+            title: 'Materiais de estudo',
+            desc: 'Políticas Públicas de Educação Especial Inclusiva.',
+            target: `#/eixo/${EIXO_DOCUMENTOS_ID}`,
+            iconHtml: '<img src="assets/images/documento-sem-fundo.png" alt="" style="width:150px;height:150px;object-fit:contain">'
+          })}
+        </div>
+      </section>
+    `;
+  }
+
+  const PAGINAS_INFO = {
+    autora: {
+      title: 'Conheça a autora',
+      theme: 'theme-purple',
+      body: `
+        <div class="info-block">
+          <p><strong>Olá!</strong></p>
+          <p>Eu sou <strong>Priscila Kaline</strong>.</p>
+          <p>Mestranda do Programa de Pós-Graduação em Educação Inclusiva (PROFEI/UERN), orientanda do professor dr. Aldeci Cunha e bolsista CAPES. Sou autora e desenvolvedora deste recurso educacional, elaborado no âmbito da minha pesquisa de mestrado.</p>
+        </div>
+        <div class="info-block">
+          <p>A criação deste recurso parte do compromisso com a educação inclusiva e com a valorização das escolas do campo, buscando aproximar a comunidade escolar dos documentos legais que orientam a Educação Especial na perspectiva inclusiva e a Educação do Campo.</p>
+          <p>Espero que este recurso possa contribuir com o trabalho de professores, professoras, gestores e demais profissionais da educação, favorecendo o acesso à informação e fortalecendo práticas educacionais inclusivas nas escolas do campo de Mossoró/RN.</p>
+          <p>Seja bem-vindo(a)! Espero que este espaço seja útil para sua prática e para a construção de uma educação cada vez mais inclusiva.</p>
+        </div>
+      `
+    },
+    recurso: {
+      title: 'Recurso educacional',
+      theme: 'theme-orange',
+      body: `
+        <div class="info-block">
+          <p>Este recurso educacional foi desenvolvido com o propósito de facilitar o acesso da comunidade escolar aos documentos legais relacionados à Educação Especial na perspectiva inclusiva e à Educação do Campo.</p>
+        </div>
+        <div class="info-block">
+          <p><strong>Objetivo:</strong> Facilitar o acesso de professores, professoras, gestores e demais integrantes da comunidade escolar aos documentos legais sobre Educação Especial inclusiva e Educação do Campo, contribuindo para o fortalecimento das práticas educacionais nas escolas do campo de Mossoró/RN.</p>
+        </div>
+        <div class="info-block">
+          <p><strong>Público-alvo:</strong> Professores e professoras, gestores, profissionais da educação e demais integrantes da comunidade escolar, especialmente aqueles que atuam nas escolas do campo.</p>
+        </div>
+        <div class="info-block">
+          <p><strong>Como utilizar este recurso?</strong></p>
+          <p>Navegue pelas diferentes seções para acessar documentos legais, materiais de estudo e outros conteúdos selecionados para contribuir com a prática educativa.</p>
+        </div>
+      `
+    }
+  };
+
+  function renderInfoPage(page) {
+    const app = getApp();
+    app.className = `app ${page.theme}`;
+    app.innerHTML = `
+      <div class="view-transition">
+      ${renderHeader(true)}
+      <div class="info-hero">
+        <h1>${page.title}</h1>
+      </div>
+      <section class="section">
+        <div class="info-content">
+          ${page.body}
+        </div>
+      </section>
+      </div>
+    `;
+  }
+
+  function renderAutora() {
+    renderInfoPage(PAGINAS_INFO.autora);
+  }
+
+  function renderRecurso() {
+    renderInfoPage(PAGINAS_INFO.recurso);
   }
 
   function renderHeroHome() {
@@ -161,22 +266,7 @@ const Views = (() => {
     const app = getApp();
     app.className = 'app theme-green';
 
-    const eixosSection = isSingleEixo() && eixos.length === 1
-      ? `
-        <section class="section">
-          <div class="section-header">
-            <div>
-              <h2>${eixos[0].nome}</h2>
-              <p>${eixos[0].descricao || ''}</p>
-            </div>
-            <a href="#/eixo/${eixos[0].id}" class="link-more">Acessar ${icon('chevron-right')}</a>
-          </div>
-          <div class="eixos-list">
-            ${renderEixoCard(eixos[0])}
-          </div>
-        </section>
-      `
-      : `
+    const eixosSection = !isSingleEixo() ? `
         <section class="section">
           <div class="section-header">
             <div>
@@ -189,13 +279,13 @@ const Views = (() => {
             ${eixos.map(e => renderEixoCard(e)).join('')}
           </div>
         </section>
-      `;
+      ` : '';
 
     app.innerHTML = `
       <div class="view-transition">
       ${renderHeader()}
       ${renderHeroHome()}
-      ${renderObjetivoCard()}
+      ${renderInfoCardsSection()}
       ${eixosSection}
       ${renderDica(getDicaAtual())}
       </div>
@@ -214,9 +304,9 @@ const Views = (() => {
     const theme = EIXO_THEMES[eixo.id];
     return `
       <div class="hero-eixo">
-        <div class="hero-eixo-label">Eixo — ${theme.label}</div>
-        <h1>${eixo.nome}</h1>
-        <p>${eixo.descricao || ''}</p>
+        <div class="hero-eixo-label">${theme.label}</div>
+        <h1>Materiais de estudo</h1>
+        <p>Políticas Públicas de Educação Especial Inclusiva.</p>
         <div class="hero-eixo-art"><img src="assets/images/documento2.png" alt=""></div>
       </div>
     `;
@@ -301,8 +391,9 @@ const Views = (() => {
 
   function renderModalFiltro(categorias, eixoId) {
     const cats = categorias.filter(c => c.eixoid === Number(eixoId));
+    const themeClass = EIXO_THEMES[Number(eixoId)]?.class || 'green';
     return `
-      <div class="modal-overlay" id="modal-overlay">
+      <div class="modal-overlay modal-theme-${themeClass}" id="modal-overlay">
         <div class="modal-sheet">
           <h3>Filtrar por categoria</h3>
           <div class="modal-options">
@@ -334,7 +425,7 @@ const Views = (() => {
       docsFiltrados = documentos.filter(d => d.categoriaid === currentCategoriaId);
     }
     const app = getApp();
-    app.className = `app theme-${theme ? theme.class : 'green'}`;
+    app.className = `app theme-${theme ? theme.class : 'green'} eixo-view`;
     const docListHtml = await renderDocList(docsFiltrados);
     app.innerHTML = `
       <div class="view-transition">
@@ -1381,6 +1472,8 @@ const Views = (() => {
     renderEixo,
     renderBiblioteca,
     renderFavoritos,
-    renderCadastro
+    renderCadastro,
+    renderAutora,
+    renderRecurso
   };
 })();

@@ -404,15 +404,23 @@ img {
 }
 
 .eixo-card-icon {
+  position: relative;
   width: 48px;
   height: 48px;
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   color: var(--primary);
+}
+.eixo-card-icon img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
 }
 .eixo-card-icon svg {
   width: 26px;
@@ -462,8 +470,101 @@ img {
 }
 
 /* ============================================================
+   PÁGINAS INFORMATIVAS
+   ============================================================ */
+.info-hero {
+  margin: 0 16px;
+  padding: 24px 20px;
+  background: var(--primary-gradient);
+  border-radius: var(--radius-lg);
+  position: relative;
+  overflow: hidden;
+}
+.info-hero::before {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 160px;
+  height: 160px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+}
+.info-hero h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary);
+  position: relative;
+}
+.info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.info-block {
+  background: var(--white);
+  border: 1px solid #f3f4f6;
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+.info-block p {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+.info-block p:last-child {
+  margin-bottom: 0;
+}
+.info-block strong {
+  color: var(--primary);
+}
+
+/* ============================================================
    HERO — EIXO
    ============================================================ */
+.app.eixo-view.theme-green .header-back,
+.app.eixo-view.theme-green .header-notif {
+  color: #1b5e4b;
+}
+.app.eixo-view.theme-green .header-notif .badge {
+  background: #1b5e4b;
+}
+.app.eixo-view.theme-purple .header-back,
+.app.eixo-view.theme-purple .header-notif {
+  color: #624693;
+}
+.app.eixo-view.theme-purple .header-notif .badge {
+  background: #624693;
+}
+.app.eixo-view.theme-orange .header-back,
+.app.eixo-view.theme-orange .header-notif {
+  color: #e8752a;
+}
+.app.eixo-view.theme-orange .header-notif .badge {
+  background: #e8752a;
+}
+.app.eixo-view.theme-green .categoria-card:hover,
+.app.eixo-view.theme-green .categoria-card.active {
+  border-color: #a5d6a7;
+}
+.app.eixo-view.theme-green .categoria-card.active {
+  background: #e8f5e9;
+}
+.app.eixo-view.theme-green .btn-filter:hover {
+  background: #e8f5e9;
+  border-color: #a5d6a7;
+}
+.modal-overlay.modal-theme-green .modal-option:hover,
+.modal-overlay.modal-theme-green .modal-option.active {
+  background: #e8f5e9;
+  border-color: #a5d6a7;
+  color: #1b5e4b;
+}
+.modal-overlay.modal-theme-green .modal-close {
+  background: #1b5e4b;
+}
 .hero-eixo {
   margin: 0 16px;
   padding: 20px;
@@ -575,7 +676,8 @@ img {
   display: flex;
   gap: 12px;
   overflow-x: auto;
-  padding: 0 16px 8px;
+  padding: 0 0 8px;
+  scroll-padding: 0 20px;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
@@ -583,15 +685,26 @@ img {
 .categorias-scroll::-webkit-scrollbar {
   display: none;
 }
+.categorias-scroll .categoria-card:first-child {
+  margin-left: 20px;
+}
+.categorias-scroll .categoria-card:last-child {
+  margin-right: 20px;
+}
 
 .categoria-card {
-  flex: 0 0 120px;
+  flex: 0 0 132px;
   scroll-snap-align: start;
   background: var(--white);
   border: 1px solid #f3f4f6;
   border-radius: var(--radius);
   padding: 16px 12px;
   text-align: center;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   box-shadow: var(--shadow);
   cursor: pointer;
   transition:
@@ -631,6 +744,11 @@ img {
   color: var(--text);
   margin-bottom: 4px;
   line-height: 1.3;
+  width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .categoria-card span {
   font-size: 11px;

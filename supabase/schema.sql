@@ -236,6 +236,7 @@ INSERT INTO categorias (eixoid, nome, icone, ordem) VALUES
 (1, 'BNCC e currículo',             'graduation-cap', 3),
 (1, 'Direitos e marcos legais',     'gavel',          4),
 (1, 'Planos e normativas',          'file-text',      5),
+(1, 'Artigos científicos, livros e estudos na área', 'book-open', 6),
 -- Eixo 2
 (2, 'Ensino colaborativo',          'users',          1),
 (2, 'Aprendizagem ativa',           'lightbulb',      2),

@@ -28,6 +28,7 @@ const MOCK_DATA = {
     { id: 3, eixoid: 1, nome: 'BNCC e currículo', icone: 'graduation-cap', ordem: 3, totaldocumentos: 1 },
     { id: 4, eixoid: 1, nome: 'Direitos e marcos legais', icone: 'gavel', ordem: 4, totaldocumentos: 0 },
     { id: 5, eixoid: 1, nome: 'Planos e normativas', icone: 'file-text', ordem: 5, totaldocumentos: 0 },
+    { id: 16, eixoid: 1, nome: 'Artigos científicos, livros e estudos na área', icone: 'book-open', ordem: 6, totaldocumentos: 0 },
     { id: 6, eixoid: 2, nome: 'Ensino colaborativo', icone: 'users', ordem: 1, totaldocumentos: 1 },
     { id: 7, eixoid: 2, nome: 'Aprendizagem ativa', icone: 'lightbulb', ordem: 2, totaldocumentos: 1 },
     { id: 8, eixoid: 2, nome: 'Diferenciação pedagógica', icone: 'layers', ordem: 3, totaldocumentos: 1 },
