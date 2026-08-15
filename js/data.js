@@ -1,4 +1,8 @@
 const MOCK_DATA = {
+  usuarios: [
+    { id: 1, nome: 'Priscila Kaline', email: 'priscilakalinec@gmail.com', senha: '123456', senha_padrao: true },
+    { id: 2, nome: 'Michel Alves', email: 'x3x31@hotmail.com', senha: '123456', senha_padrao: true }
+  ],
   eixos: [
     {
       id: 1, ordem: 1,

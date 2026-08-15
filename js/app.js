@@ -43,6 +43,9 @@ const App = (() => {
       case '#/cadastrar':
         Views.renderCadastro();
         break;
+      case '#/conta':
+        Views.renderConta();
+        break;
       default:
         window.location.hash = '#/';
         break;

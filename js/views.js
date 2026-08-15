@@ -185,7 +185,8 @@ const Views = (() => {
       title: 'Conheça a autora',
       theme: 'theme-purple',
       body: `
-        <div class="info-block">
+        <div class="info-block info-block-autora">
+          <img class="autora-foto" src="assets/images/priscila.png" alt="Priscila Kaline">
           <p><strong>Olá!</strong></p>
           <p>Eu sou <strong>Priscila Kaline</strong>.</p>
           <p>Mestranda do Programa de Pós-Graduação em Educação Inclusiva (PROFEI/UERN), orientanda do professor dr. Aldeci Cunha e bolsista CAPES. Sou autora e desenvolvedora deste recurso educacional, elaborado no âmbito da minha pesquisa de mestrado.</p>
@@ -194,6 +195,11 @@ const Views = (() => {
           <p>A criação deste recurso parte do compromisso com a educação inclusiva e com a valorização das escolas do campo, buscando aproximar a comunidade escolar dos documentos legais que orientam a Educação Especial na perspectiva inclusiva e a Educação do Campo.</p>
           <p>Espero que este recurso possa contribuir com o trabalho de professores, professoras, gestores e demais profissionais da educação, favorecendo o acesso à informação e fortalecendo práticas educacionais inclusivas nas escolas do campo de Mossoró/RN.</p>
           <p>Seja bem-vindo(a)! Espero que este espaço seja útil para sua prática e para a construção de uma educação cada vez mais inclusiva.</p>
+        </div>
+        <div class="info-block">
+          <p><strong>Currículo Lattes:</strong> <a href="https://lattes.cnpq.br/9034540491505313" target="_blank" rel="noopener">lattes.cnpq.br/9034540491505313</a></p>
+          <p><strong>E-mail:</strong> priscilakalinec@gmail.com</p>
+          <p>Este trabalho foi realizado com apoio da Coordenação de Aperfeiçoamento de Pessoal de Nível Superior - Brasil (CAPES) - Código de Financiamento 001.</p>
         </div>
       `
     },
@@ -242,6 +248,180 @@ const Views = (() => {
 
   function renderRecurso() {
     renderInfoPage(PAGINAS_INFO.recurso);
+  }
+
+  function abrirModalRedefinirSenha(sessao) {
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.innerHTML = `
+      <div class="modal-sheet">
+        <h3>Redefinir senha</h3>
+        <p class="modal-sheet-sub">Você ainda está usando a senha padrão (123456). Por segurança, defina uma nova senha antes de continuar.</p>
+        <form id="reset-form" class="cadastro-form">
+          <div class="form-group">
+            <label class="form-label">Nova senha</label>
+            <input type="password" class="form-input" id="reset-nova" placeholder="Nova senha" autocomplete="new-password" required minlength="6">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirmar nova senha</label>
+            <input type="password" class="form-input" id="reset-confirma" placeholder="Confirme a nova senha" autocomplete="new-password" required minlength="6">
+          </div>
+          <p class="form-error" id="reset-error" hidden></p>
+          <button type="submit" class="btn-submit">
+            ${icon('clipboard-check')} Salvar nova senha
+          </button>
+        </form>
+        <button class="modal-close" id="reset-cancel" style="background:var(--text-muted)">Cancelar</button>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) overlay.remove();
+    });
+    document.getElementById('reset-cancel').addEventListener('click', () => overlay.remove());
+
+    document.getElementById('reset-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const nova = document.getElementById('reset-nova').value;
+      const confirma = document.getElementById('reset-confirma').value;
+      const errorEl = document.getElementById('reset-error');
+      errorEl.hidden = true;
+      if (nova.length < 6) {
+        errorEl.textContent = 'A senha deve ter pelo menos 6 caracteres.';
+        errorEl.hidden = false;
+        return;
+      }
+      if (nova !== confirma) {
+        errorEl.textContent = 'As senhas não coincidem.';
+        errorEl.hidden = false;
+        return;
+      }
+      const btn = this.querySelector('.btn-submit');
+      btn.disabled = true;
+      try {
+        await Api.alterarSenha(sessao.email, '123456', nova);
+        Store.setSessao({ ...sessao, senha_padrao: false });
+        overlay.remove();
+        renderConta();
+      } catch (err) {
+        errorEl.textContent = err.message || 'Não foi possível alterar a senha.';
+        errorEl.hidden = false;
+        btn.disabled = false;
+      }
+    });
+  }
+
+  function renderConta() {
+    const app = getApp();
+    app.className = 'app theme-green';
+    const sessao = Store.getSessao();
+
+    if (!sessao) {
+      app.innerHTML = `
+        <div class="view-transition">
+        ${renderHeader()}
+        <div class="info-hero">
+          <h1>Área restrita</h1>
+        </div>
+        <section class="section">
+          <div class="auth-card">
+            <div class="auth-card-icon">${icon('lock')}</div>
+            <h2>Login</h2>
+            <p>Área restrita a usuários autorizados. Entre com suas credenciais para gerenciar os documentos do EduBase.</p>
+            <form id="login-form" class="cadastro-form">
+              <div class="form-group">
+                <label class="form-label">E-mail</label>
+                <input type="email" class="form-input" id="login-email" placeholder="seu@email.com" autocomplete="username" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Senha</label>
+                <input type="password" class="form-input" id="login-senha" placeholder="Sua senha" autocomplete="current-password" required>
+              </div>
+              <p class="form-error" id="login-error" hidden></p>
+              <button type="submit" class="btn-submit">
+                ${icon('lock')} Entrar
+              </button>
+            </form>
+          </div>
+        </section>
+        </div>
+      `;
+
+      document.getElementById('login-form').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value.trim();
+        const senha = document.getElementById('login-senha').value;
+        const errorEl = document.getElementById('login-error');
+        const btn = this.querySelector('.btn-submit');
+        errorEl.hidden = true;
+        btn.disabled = true;
+        try {
+          const user = await Api.login(email, senha);
+          Store.setSessao(user);
+          renderConta();
+          if (user.senha_padrao) {
+            abrirModalRedefinirSenha(user);
+          }
+        } catch (err) {
+          errorEl.textContent = err.message || 'Falha no login.';
+          errorEl.hidden = false;
+          btn.disabled = false;
+        }
+      });
+      return;
+    }
+
+    const ehPriscila = (sessao.email || '').toLowerCase() === 'priscilakalinec@gmail.com';
+
+    app.innerHTML = `
+      <div class="view-transition">
+      ${renderHeader()}
+      <div class="info-hero">
+        <h1>Área restrita</h1>
+      </div>
+      <section class="section">
+        <div class="auth-card">
+          <div class="auth-card-icon">${ehPriscila ? '<img class="auth-card-foto" src="assets/images/priscila.png" alt="Priscila Kaline">' : icon('user')}</div>
+          <h2>Olá, ${sessao.nome}!</h2>
+          <p>${sessao.email}</p>
+        </div>
+        <div class="conta-actions">
+          <button class="conta-action" id="btn-cadastrar-doc">
+            <span class="conta-action-icon">${icon('file-plus')}</span>
+            <div>
+              <strong>Cadastrar Documento</strong>
+              <span>Abra o formulário para cadastrar novos documentos</span>
+            </div>
+            <span class="conta-action-arrow">${icon('chevron-right')}</span>
+          </button>
+          <button class="conta-action" id="btn-alterar-senha">
+            <span class="conta-action-icon">${icon('key')}</span>
+            <div>
+              <strong>Alterar senha</strong>
+              <span>Atualize sua senha de acesso</span>
+            </div>
+            <span class="conta-action-arrow">${icon('chevron-right')}</span>
+          </button>
+          <button class="conta-action danger" id="btn-logout">
+            <span class="conta-action-icon">${icon('log-out')}</span>
+            <div>
+              <strong>Sair</strong>
+              <span>Encerrar a sessão no aplicativo</span>
+            </div>
+            <span class="conta-action-arrow">${icon('chevron-right')}</span>
+          </button>
+        </div>
+      </section>
+      </div>
+    `;
+
+    document.getElementById('btn-cadastrar-doc').addEventListener('click', () => App.navigate('#/cadastrar'));
+    document.getElementById('btn-alterar-senha').addEventListener('click', () => abrirModalRedefinirSenha(sessao));
+    document.getElementById('btn-logout').addEventListener('click', () => {
+      Store.clearSessao();
+      renderConta();
+    });
   }
 
   function renderHeroHome() {
@@ -923,9 +1103,30 @@ const Views = (() => {
     }
   }
 
+  function abrirFotoModal(src) {
+    const overlay = document.createElement('div');
+    overlay.className = 'foto-overlay';
+    overlay.innerHTML = `
+      <div class="foto-modal">
+        <img src="${src}" alt="Priscila Kaline">
+        <button class="foto-close" id="foto-close">${icon('x')}</button>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay || e.target.closest('#foto-close')) overlay.remove();
+    });
+  }
+
   function init() {
     const app = getApp();
     app.addEventListener('click', function (e) {
+      const foto = e.target.closest('.autora-foto');
+      if (foto) {
+        e.preventDefault();
+        abrirFotoModal(foto.getAttribute('src'));
+        return;
+      }
       const btn = e.target.closest('[data-action="visualizar"]');
       if (btn) {
         e.preventDefault();
@@ -941,6 +1142,30 @@ const Views = (() => {
   }
 
   async function renderCadastro() {
+    if (!Store.getSessao()) {
+      const app = getApp();
+      app.className = 'app theme-green';
+      app.innerHTML = `
+        <div class="view-transition">
+        ${renderHeader()}
+        <div class="info-hero">
+          <h1>Cadastrar Documento</h1>
+        </div>
+        <section class="section">
+          <div class="empty-state">
+            ${icon('lock')}
+            <h2 style="font-size:18px;color:var(--text);margin-bottom:6px">Acesso restrito</h2>
+            <p>Para cadastrar documentos, faça login na área restrita da plataforma.</p>
+            <button class="btn-submit" style="max-width:260px;margin:16px auto 0" onclick="App.navigate('#/conta')">
+              ${icon('lock')} Fazer login
+            </button>
+          </div>
+        </section>
+        </div>
+      `;
+      return;
+    }
+
     showLoading();
     const [eixos, tags, icones] = await Promise.all([
       Api.getEixos(),
@@ -1473,6 +1698,7 @@ const Views = (() => {
     renderBiblioteca,
     renderFavoritos,
     renderCadastro,
+    renderConta,
     renderAutora,
     renderRecurso
   };

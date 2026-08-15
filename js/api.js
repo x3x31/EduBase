@@ -208,9 +208,74 @@ const Api = (() => {
     if (error) throw error;
   }
 
+  const MOCK_USUARIOS_KEY = 'edubase_usuarios_mock';
+
+  function getMockUsuarios() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(MOCK_USUARIOS_KEY) || '[]');
+      if (Array.isArray(saved) && saved.length > 0) return saved;
+    } catch (e) {}
+    return MOCK_DATA.usuarios;
+  }
+
+  function saveMockUsuarios(usuarios) {
+    try {
+      localStorage.setItem(MOCK_USUARIOS_KEY, JSON.stringify(usuarios));
+    } catch (e) {}
+  }
+
+  async function login(email, senha) {
+    if (useMock) {
+      const usuarios = getMockUsuarios();
+      const u = usuarios.find(x => x.email.toLowerCase() === email.toLowerCase());
+      if (u && u.senha === senha) {
+        return { id: u.id, nome: u.nome, email: u.email, senha_padrao: !!u.senha_padrao };
+      }
+      throw new Error('E-mail ou senha inválidos.');
+    }
+
+    const { data, error } = await supabase.rpc('autenticar_usuario', {
+      p_email: email,
+      p_senha: senha
+    });
+    if (error) throw error;
+    if (!data || (Array.isArray(data) && data.length === 0)) {
+      throw new Error('E-mail ou senha inválidos.');
+    }
+    const row = Array.isArray(data) ? data[0] : data;
+    return { id: row.id, nome: row.nome, email: row.email, senha_padrao: !!row.senha_padrao };
+  }
+
+  async function alterarSenha(email, senhaAtual, novaSenha) {
+    if (useMock) {
+      const usuarios = getMockUsuarios();
+      const u = usuarios.find(x => x.email.toLowerCase() === email.toLowerCase());
+      if (!u || u.senha !== senhaAtual) {
+        throw new Error('Senha atual incorreta.');
+      }
+      u.senha = novaSenha;
+      u.senha_padrao = false;
+      saveMockUsuarios(usuarios);
+      return true;
+    }
+
+    const { data, error } = await supabase.rpc('alterar_senha', {
+      p_email: email,
+      p_senha_atual: senhaAtual,
+      p_nova_senha: novaSenha
+    });
+    if (error) throw error;
+    if (!data) throw new Error('Senha atual incorreta.');
+    return true;
+  }
+
+  function isLogado() {
+    return !!Store.getSessao();
+  }
+
   function isUsingMock() {
     return useMock;
   }
 
-  return { init, getEixos, getEixo, getCategorias, getTags, getIcones, getDocumentos, getDocumentosRecentes, createDocumento, addDocumentoTag, removeDocumentoTags, updateDocumentoTags, updateDocumento, deleteDocumento, isUsingMock };
+  return { init, getEixos, getEixo, getCategorias, getTags, getIcones, getDocumentos, getDocumentosRecentes, createDocumento, addDocumentoTag, removeDocumentoTags, updateDocumentoTags, updateDocumento, deleteDocumento, login, alterarSenha, isLogado, isUsingMock };
 })();

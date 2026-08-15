@@ -3,6 +3,8 @@ const Store = (() => {
   const DB_VERSION = 2;
   const STORE_BOOKMARKS = 'bookmarks';
   const STORE_REMOVIDAS = 'notificacoes_removidas';
+  const SESSION_KEY = 'edubase_sessao';
+  const SESSION_DURACAO_MS = 60 * 60 * 1000;
 
   function openDB() {
     return new Promise((resolve, reject) => {
@@ -125,5 +127,39 @@ const Store = (() => {
     });
   }
 
-  return { addBookmark, removeBookmark, getAllBookmarks, getAllBookmarkIds, isBookmarked, addRemovida, isRemovida, getTodasRemovidas };
+  function setSessao(user) {
+    try {
+      localStorage.setItem(SESSION_KEY, JSON.stringify({
+        id: user.id,
+        nome: user.nome,
+        email: user.email,
+        senha_padrao: !!user.senha_padrao,
+        login_em: new Date().toISOString()
+      }));
+    } catch (e) {}
+  }
+
+  function getSessao() {
+    try {
+      const sessao = JSON.parse(localStorage.getItem(SESSION_KEY)) || null;
+      if (!sessao) return null;
+      if (!sessao.login_em) return null;
+      const idadeMs = Date.now() - new Date(sessao.login_em).getTime();
+      if (idadeMs > SESSION_DURACAO_MS) {
+        localStorage.removeItem(SESSION_KEY);
+        return null;
+      }
+      return sessao;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function clearSessao() {
+    try {
+      localStorage.removeItem(SESSION_KEY);
+    } catch (e) {}
+  }
+
+  return { addBookmark, removeBookmark, getAllBookmarks, getAllBookmarkIds, isBookmarked, addRemovida, isRemovida, getTodasRemovidas, setSessao, getSessao, clearSessao };
 })();
