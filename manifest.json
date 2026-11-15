@@ -1,42 +1,249 @@
 {
-  "name": "EduBase — Educação Inclusiva",
-  "short_name": "EduBase",
-  "description": "Educação Especial Inclusiva.",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#f1f5fe",
-  "theme_color": "#1565c0",
-  "lang": "pt-BR",
-  "icons": [
-    {
-      "src": "assets/images/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
+    "schemaVersion": 1,
+    "generator": "scripts/build-manifest.mjs",
+    "generatedAt": "2026-11-15T00:00:00Z",
+    "summary": {
+        "materials": 13,
+        "validMaterials": 13,
+        "invalidMaterials": 0,
+        "questions": 3767,
+        "errors": 0,
+        "warnings": 8
     },
-    {
-      "src": "assets/images/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "assets/images/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "assets/images/splash.png",
-      "sizes": "1080x1920",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Tela inicial do EduBase"
-    }
-  ],
-  "categories": ["education"],
-  "dir": "ltr"
+    "files": [
+        {
+            "path": "ESTUDO_LINGUA_PORTUGUESA.md",
+            "file": "ESTUDO_LINGUA_PORTUGUESA.md",
+            "title": "Língua Portuguesa",
+            "materialId": "MAT-LP",
+            "bank": null,
+            "subject": "Língua Portuguesa",
+            "topic": "Todos os tópicos de Língua Portuguesa da apostila",
+            "language": "pt-BR",
+            "questionCount": 643,
+            "declaredQuestions": 643,
+            "sizeBytes": 2216368,
+            "sha256": "84fc6c7e3b2202eb2fc5d6ca58ee201b97b14aef428cb57744df38463fa1fbe6",
+            "valid": true,
+            "errors": [],
+            "warnings": []
+        },
+        {
+            "path": "ESTUDO_LEGISLACAO.md",
+            "file": "ESTUDO_LEGISLACAO.md",
+            "title": "Legislação",
+            "materialId": "MAT-LEG",
+            "bank": null,
+            "subject": "Legislação",
+            "topic": "Legislação municipal e Lei de Improbidade Administrativa",
+            "language": "pt-BR",
+            "questionCount": 221,
+            "declaredQuestions": 221,
+            "sizeBytes": 766643,
+            "sha256": "6aad0bc35115fb51157dfbc1f3abc2297d4dc9fe1deb3fbb78b74584941d7c81",
+            "valid": true,
+            "errors": [],
+            "warnings": []
+        },
+        {
+            "path": "ESTUDO_CONHECIMENTOS_ESPECIFICOS.md",
+            "file": "ESTUDO_CONHECIMENTOS_ESPECIFICOS.md",
+            "title": "Conhecimentos Específicos",
+            "materialId": "MAT-ESP",
+            "bank": null,
+            "subject": "Conhecimentos Específicos",
+            "topic": "Conteúdo integral de Conhecimentos Específicos",
+            "language": "pt-BR",
+            "questionCount": 1653,
+            "declaredQuestions": 1653,
+            "sizeBytes": 14470220,
+            "sha256": "d1137abbf16126f3531df710ef00d3e5ccb994682901339a23ac6faa711b46d6",
+            "valid": true,
+            "errors": [],
+            "warnings": [
+                "A questão 269 aparece sem enunciado no PDF de origem; foram preservadas somente as alternativas visíveis, sem reconstrução do comando.",
+                "A questão 1510 possui quatro alternativas no documento original; nenhuma quinta alternativa foi inventada."
+            ]
+        },
+		{
+            "path": "questoes/ESTUDO_BANCO_DE_DADOS_COMPERVE_50_QUESTOES.md",
+            "file": "ESTUDO_BANCO_DE_DADOS_COMPERVE_50_QUESTOES.md",
+            "title": "Banco de Dados",
+            "materialId": "MAT-BD-COMPERVE-001",
+            "bank": "COMPERVE",
+            "subject": "Banco de Dados",
+            "topic": "Conceitos, modelos, projeto conceitual, lógico e físico, linguagens de consulta, bancos distribuídos, SGBDs e SQL",
+            "language": "pt-BR",
+            "questionCount": 50,
+            "declaredQuestions": 50,
+            "sizeBytes": 220419,
+            "sha256": "a5a8f79679af072af22d4399975a0e43eadca317f8933f63bab2eac767596f63",
+            "valid": true,
+            "errors": [],
+            "warnings": []
+        },
+        {
+            "path": "questoes/ESTUDO_LEGISLACAO_COMPERVE_100_QUESTOES.md",
+            "file": "ESTUDO_LEGISLACAO_COMPERVE_100_QUESTOES.md",
+            "title": "Legislação",
+            "materialId": "MAT-LEG-COMPERVE-001",
+            "bank": "COMPERVE",
+            "subject": "Legislação",
+            "topic": "Regimento Interno da Câmara Municipal de Mossoró, Lei Orgânica do Município de Mossoró e Lei nº 8.429/1992",
+            "language": "pt-BR",
+            "questionCount": 100,
+            "declaredQuestions": 100,
+            "sizeBytes": 365079,
+            "sha256": "95b4043297619f96c6dc10f862c107efa059d132285780797af2d1afd7ddcb96",
+            "valid": true,
+            "errors": [],
+            "warnings": []
+        },
+        {
+            "path": "questoes/ESTUDO_CONHECIMENTO_LINGUISTICO_COMPERVE_100_QUESTOES.md",
+            "file": "ESTUDO_CONHECIMENTO_LINGUISTICO_COMPERVE_100_QUESTOES.md",
+            "title": "Conhecimento Linguístico",
+            "materialId": "MAT-001",
+            "bank": "COMPERVE",
+            "subject": "Conhecimento Linguístico",
+            "topic": "Variação linguística; classes de palavras; norma-padrão; período simples e composto; pontuação; relações semânticas",
+            "language": "pt-BR",
+            "questionCount": 100,
+            "declaredQuestions": 100,
+            "sizeBytes": 507370,
+            "sha256": "f16e37db348478703f5f858cc2c0cbce030229f4cc97da7c956ddec9977423f7",
+            "valid": true,
+            "errors": [],
+            "warnings": []
+        },
+        {
+            "path": "questoes/ESTUDO_ENGENHARIA_DE_SOFTWARE_COMPERVE_100_QUESTOES.md",
+            "file": "ESTUDO_ENGENHARIA_DE_SOFTWARE_COMPERVE_100_QUESTOES.md",
+            "title": "Engenharia de Software",
+            "materialId": "MAT-ENGSOFT-COMPERVE-001",
+            "bank": "COMPERVE",
+            "subject": "Engenharia de Software",
+            "topic": "Padrões GoF; processos e ciclo de vida; métodos estruturados e orientados a objetos; planejamento; requisitos; análise e projeto; gestão de configuração; testes; qualidade; manutenção; desenvolvimento baseado em componentes; ferramentas CASE; gestão de projetos; Scrum; UML 2.0",
+            "language": "pt-BR",
+            "questionCount": 100,
+            "declaredQuestions": 100,
+            "sizeBytes": 427273,
+            "sha256": "0bc2251e6acb37ed150877527f3a8d1950cb0de8294a2e0c087cd9c9b00d96e4",
+            "valid": true,
+            "errors": [],
+            "warnings": []
+        },
+        {
+            "path": "questoes/ESTUDO_ORGANIZACAO_DO_TEXTO_COMPERVE_100_QUESTOES.md",
+            "file": "ESTUDO_ORGANIZACAO_DO_TEXTO_COMPERVE_100_QUESTOES.md",
+            "title": "Organização do Texto",
+            "materialId": "MAT-ORG-TEXTO-COMPERVE-001",
+            "bank": "COMPERVE",
+            "subject": "Organização do Texto",
+            "topic": "Propósito comunicativo; tipos de texto (dialogal, descritivo, narrativo, injuntivo, explicativo e argumentativo); gêneros discursivos; mecanismos coesivos; fatores de coerência textual; progressão temática; paragrafação; citação do discurso alheio; informações implícitas; linguagem denotativa e conotativa",
+            "language": "pt-BR",
+            "questionCount": 100,
+            "declaredQuestions": 100,
+            "sizeBytes": 501413,
+            "sha256": "b95402065baed132ef94c0cdc694b9821e2f62fc4532006c5bea10744b2130ea",
+            "valid": true,
+            "errors": [],
+            "warnings": []
+        },
+        {
+            "path": "questoes/ESTUDO_SISTEMAS_OPERACIONAIS_COMPERVE_100_QUESTOES.md",
+            "file": "ESTUDO_SISTEMAS_OPERACIONAIS_COMPERVE_100_QUESTOES.md",
+            "title": "Sistemas Operacionais",
+            "materialId": "MAT-SO",
+            "bank": "COMPERVE",
+            "subject": "Sistemas Operacionais",
+            "topic": "Utilização e configuração de sistemas Windows, Unix e Linux e suas distribuições",
+            "language": "pt-BR",
+            "questionCount": 100,
+            "declaredQuestions": 100,
+            "sizeBytes": 731428,
+            "sha256": "fb06a0adf2a35a1fae48916811e128ed313e2c889cf6d574431c07957ae19844",
+            "valid": true,
+            "errors": [],
+            "warnings": []
+        },
+        {
+            "path": "questoes/ESTUDO_REDES_DE_COMPUTADORES_COMPERVE_100_QUESTOES.md",
+            "file": "ESTUDO_REDES_DE_COMPUTADORES_COMPERVE_100_QUESTOES.md",
+            "title": "Redes de Computadores",
+            "materialId": "MAT-REDES-COMPERVE-001",
+            "bank": "COMPERVE",
+            "subject": "Redes de Computadores",
+            "topic": "Conceitos básicos, tipos de redes e protocolos de comunicação (HTTP, SSH, IMAP, SMTP, TCP/IP e UDP)",
+            "language": "pt-BR",
+            "questionCount": 100,
+            "declaredQuestions": 100,
+            "sizeBytes": 466402,
+            "sha256": "cf93814c60c759427e0f9bb4f2eb84285a07ba50e9b7f37cc8cc02b129b7fbb9",
+            "valid": true,
+            "errors": [],
+            "warnings": [
+                "As questões originais não foram comparadas com gabaritos oficiais, ausentes do corpus."
+            ]
+        },
+        {
+            "path": "questoes/ESTUDO_LINGUAGENS_DE_PROGRAMACAO_COMPERVE_400_QUESTOES.md",
+            "file": "ESTUDO_LINGUAGENS_DE_PROGRAMACAO_COMPERVE_400_QUESTOES.md",
+            "title": "Linguagens de Programação",
+            "materialId": "MAT-LP-COMPERVE-400",
+            "bank": "COMPERVE",
+            "subject": "Linguagens de Programação",
+            "topic": "Java; JavaScript (ECMAScript 2020); TypeScript 5.4; Node.js 20.14; React 18; React Native 0.74; NestJS 10.3.9",
+            "language": "pt-BR",
+            "questionCount": 400,
+            "declaredQuestions": 400,
+            "sizeBytes": 1873393,
+            "sha256": "c23242f1722c7ea498cabb95555be80efc58c54fedbe04b0a10f0954234d8c6a",
+            "valid": true,
+            "errors": [],
+            "warnings": [
+                "As questões originais foram extraídas de caderno sem gabarito oficial anexado ao corpus; respostas conferidas tecnicamente, mas não confrontadas com gabarito oficial."
+            ]
+        },
+        {
+            "path": "questoes/ESTUDO_LGPD_COMPERVE_100_QUESTOES.md",
+            "file": "ESTUDO_LGPD_COMPERVE_100_QUESTOES.md",
+            "title": "LGPD",
+            "materialId": "MAT-LGPD-COMPERVE-001",
+            "bank": "COMPERVE",
+            "subject": "Segurança da Informação",
+            "topic": "Segurança de dados — Lei Geral de Proteção de Dados Pessoais (LGPD), Lei nº 13.709/2018",
+            "language": "pt-BR",
+            "questionCount": 100,
+            "declaredQuestions": 100,
+            "sizeBytes": 501510,
+            "sha256": "401febec7bb8e6986aacca516f75a538e76758906b5e3c031056ba5a1c039131",
+            "valid": true,
+            "errors": [],
+            "warnings": [
+                "Gabaritos das questões originais foram conferidos pela interpretação dos dispositivos legais; o corpus não continha os gabaritos oficiais correspondentes.",
+                "Validação estrutural e de consistência realizada; recomenda-se revisão jurídica especializada final das questões inéditas antes de uso como material oficial de avaliação."
+            ]
+        },
+        {
+            "path": "questoes/ESTUDO_CONCEITOS_BASICOS_SOFTWARE_HARDWARE_COMPERVE_100_QUESTOES.md",
+            "file": "ESTUDO_CONCEITOS_BASICOS_SOFTWARE_HARDWARE_COMPERVE_100_QUESTOES.md",
+            "title": "Conceitos Básicos de Software e Hardware",
+            "materialId": "MAT-SH-COMPERVE-100",
+            "bank": "COMPERVE",
+            "subject": "Conceitos Básicos de Software e Hardware",
+            "topic": "Definição, tipos, funções e características de software e hardware",
+            "language": "pt-BR",
+            "questionCount": 100,
+            "declaredQuestions": 100,
+            "sizeBytes": 685535,
+            "sha256": "1689d923c4e089317a2e51c192bef71c243c4776feaa4af4edfc0b9583043699",
+            "valid": true,
+            "errors": [],
+            "warnings": [
+                "Auditoria estrutural automatizada; revisão pedagógica realizada por consistência de conteúdo e distinção conceitual, não equivale a parecer técnico independente.",
+                "Questões originais sem gabaritos oficiais no corpus foram verificadas pelo conteúdo técnico; páginas não informadas quando não confirmadas."
+            ]
+        }
+    ]
 }
